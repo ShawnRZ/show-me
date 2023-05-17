@@ -9,6 +9,7 @@ import { MatchList, Match, MatchHistory } from "./types/Match";
 
 export { queryMatchDetail, queryMatchHistory, queryRankStats, updateCommandLine, updateCurrentSummoner, querySummonerByName }
 
+// 获取客户端命令行参数
 async function updateCommandLine() {
     // console.log(`getCommandLine()`);
 
@@ -23,6 +24,7 @@ async function updateCommandLine() {
     // console.log(configStore.token);
 }
 
+// 获取当前客户端登陆的玩家
 async function updateCurrentSummoner() {
     const summonerStore = useSummonerStore();
     const configStore = useConfigStore();
@@ -49,6 +51,7 @@ async function updateCurrentSummoner() {
 
 }
 
+// 查询玩家
 async function querySummonerByName(name: string) {
     const summonerStore = useSummonerStore();
     const configStore = useConfigStore();
@@ -76,6 +79,7 @@ async function querySummonerByName(name: string) {
     summonerStore.querySummoner = res.data as Summoner;
 }
 
+// 查询排位数据
 async function queryRankStats(puuid: string): Promise<RankedStats> {
     const configStore = useConfigStore();
 
@@ -99,6 +103,7 @@ async function queryRankStats(puuid: string): Promise<RankedStats> {
     return res.data as RankedStats;
 }
 
+// 查询历史战绩
 async function queryMatchHistory(puuid: string, beg: number, end: number): Promise<MatchHistory> {
     const configStore = useConfigStore();
 
@@ -126,6 +131,7 @@ async function queryMatchHistory(puuid: string, beg: number, end: number): Promi
     return res.data as MatchHistory;
 }
 
+// 获取某一局游戏的详细信息
 async function queryMatchDetail(gameId: number) {
     const configStore = useConfigStore();
 

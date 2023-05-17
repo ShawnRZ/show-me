@@ -1,6 +1,7 @@
 
 /**
  * LolMatchHistoryMatchHistoryList
+ * 对局列表
  */
 export interface MatchHistory {
     accountId: number;
@@ -14,9 +15,16 @@ export interface MatchHistory {
  */
 export interface MatchList {
     gameBeginDate: string;
+
+    // 可查询的对局数
     gameCount: number;
+
     gameEndDate: string;
+
+    // 第一个对局序号
     gameIndexBegin: number;
+
+    // 最后一个对局序号
     gameIndexEnd: number;
     games: Match[];
 }
