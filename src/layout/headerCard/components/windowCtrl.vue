@@ -14,11 +14,11 @@ function close() {
 
 <template>
   <div class="window-ctrl">
-    <div class="minmize">
-      <Minus @click="minimize" class="icon" />
+    <div class="minmize" @click="minimize">
+      <Minus class="icon" />
     </div>
-    <div class="close">
-      <Close @click="close" class="icon" />
+    <div class="close" @click="close">
+      <Close class="icon" />
     </div>
   </div>
 </template>
@@ -26,7 +26,7 @@ function close() {
 <style scoped lang="scss">
 .window-ctrl {
   height: 60px;
-  width: 400px;
+  width: 120px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -54,6 +54,7 @@ function close() {
       background-color: rgb(232, 17, 35);
     }
   }
+
   .icon {
     width: 20px;
     height: 20px;
