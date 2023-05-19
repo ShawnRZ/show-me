@@ -9,11 +9,14 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    ElAside: typeof import('element-plus/es')['ElAside']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
+    ElContainer: typeof import('element-plus/es')['ElContainer']
+    ElHeader: typeof import('element-plus/es')['ElHeader']
     ElImage: typeof import('element-plus/es')['ElImage']
-    ElImg: typeof import('element-plus/es')['ElImg']
     ElInput: typeof import('element-plus/es')['ElInput']
+    ElMain: typeof import('element-plus/es')['ElMain']
     ElProgress: typeof import('element-plus/es')['ElProgress']
     ElScrollbar: typeof import('element-plus/es')['ElScrollbar']
     ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
@@ -23,6 +26,8 @@ declare module '@vue/runtime-core' {
     GameItem: typeof import('./src/components/GameItem.vue')['default']
     GameList: typeof import('./src/components/GameList.vue')['default']
     Querry: typeof import('./src/components/Querry.vue')['default']
+    RouterLink: typeof import('vue-router')['RouterLink']
+    RouterView: typeof import('vue-router')['RouterView']
     SummonerInfo: typeof import('./src/components/SummonerInfo.vue')['default']
     UserInfo: typeof import('./src/components/UserInfo.vue')['default']
   }

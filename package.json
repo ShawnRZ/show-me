@@ -14,7 +14,8 @@
     "@tauri-apps/api": "^1.2.0",
     "element-plus": "^2.3.4",
     "pinia": "^2.0.35",
-    "vue": "^3.2.45"
+    "vue": "^3.2.45",
+    "vue-router": "^4.2.1"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^1.2.2",

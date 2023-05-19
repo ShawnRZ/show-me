@@ -4,6 +4,7 @@ import vue from "@vitejs/plugin-vue";
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
+import * as path from "path";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
@@ -16,7 +17,11 @@ export default defineConfig(async () => ({
       resolvers: [ElementPlusResolver()],
     }),
   ],
-
+  resolve:{
+    alias:{
+      '@':path.resolve(__dirname,'./src')
+    },
+  },
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   // prevent vite from obscuring rust errors
   clearScreen: false,
