@@ -9,7 +9,10 @@ import { MatchList, Match, MatchHistory } from "./types/Match";
 
 export { queryMatchDetail, queryMatchHistory, queryRankStats, updateCommandLine, updateCurrentSummoner, querySummonerByName }
 
-// 获取客户端命令行参数
+/**
+ * 获取连接客户端需要的端口和鉴权token，失败则抛出错误
+ * 
+ */
 async function updateCommandLine() {
     // console.log(`getCommandLine()`);
 
@@ -24,7 +27,12 @@ async function updateCommandLine() {
     // console.log(configStore.token);
 }
 
-// 获取当前客户端登陆的玩家
+/**
+ * 获取对当前客户端登陆的玩家，如果失败直接抛出异常
+ * 
+ * @returns Summoner
+ * 
+ */
 async function updateCurrentSummoner() {
     const summonerStore = useSummonerStore();
     const configStore = useConfigStore();
@@ -51,7 +59,11 @@ async function updateCurrentSummoner() {
 
 }
 
-// 查询玩家
+/**
+ * 查询指定名字的召唤师，失败则抛出错误
+ * 
+ * @param name 查询召唤师的名字
+ */
 async function querySummonerByName(name: string) {
     const summonerStore = useSummonerStore();
     const configStore = useConfigStore();
@@ -79,7 +91,12 @@ async function querySummonerByName(name: string) {
     summonerStore.querySummoner = res.data as Summoner;
 }
 
-// 查询排位数据
+/**
+ * 查询指定玩家的排位统计信息
+ * 
+ * @param puuid 需要查询的玩家的puuid
+ * @returns 返回查询玩家的排位统计信息
+ */
 async function queryRankStats(puuid: string): Promise<RankedStats> {
     const configStore = useConfigStore();
 
@@ -103,7 +120,25 @@ async function queryRankStats(puuid: string): Promise<RankedStats> {
     return res.data as RankedStats;
 }
 
-// 查询历史战绩
+/**
+ * 查询指定玩家的历史战绩，[beg,end)，对局编号按时间由近到远从0开始编号，每次最多查询20场对局
+ * 若查询的对局编号超出可查询的范围，超出部分会被忽略，每个玩家的的可查询范围从MatchHistory.games.gameCount获取
+ * 此接口中每一场对局仅包含自己的数据
+ * @example
+ * 查询最近的两场对局 
+ * ```ts
+ * queryMatchHistory(puuid, 0, 2)
+ * ```
+ * 查询最近的四场对局，每次查询两场
+ * ```ts
+ * queryMatchHistory(puuid,0,2)
+ * queryMatchHistory(puuid,2,3)
+ * ```
+ * @param puuid 查询玩家的puuid
+ * @param beg 开始的对局编号
+ * @param end 结束的对局编号
+ * @returns MatchHistory
+ */
 async function queryMatchHistory(puuid: string, beg: number, end: number): Promise<MatchHistory> {
     const configStore = useConfigStore();
 
@@ -131,7 +166,12 @@ async function queryMatchHistory(puuid: string, beg: number, end: number): Promi
     return res.data as MatchHistory;
 }
 
-// 获取某一局游戏的详细信息
+/**
+ * 获取一场对局的详细信息，失败则抛出错误
+ * 此接口包含全部10个玩家的数据
+ * @param gameId 对局id
+ * @returns Match
+ */
 async function queryMatchDetail(gameId: number) {
     const configStore = useConfigStore();
 
