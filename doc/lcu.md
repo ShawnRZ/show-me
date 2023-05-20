@@ -79,8 +79,8 @@
 
 > 获取方式和召唤师技能类似
 
-1. 从``获取到装符文的图标和描述信息
-2. 通过itemId在表中找到对应的数据，示例如下
+1. 从`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/zh_cn/v1/perks.json`获取到符文的图标和描述信息
+2. 通过perkId在表中找到对应的数据，示例如下
 ```javascript
   {
     "id": 8369,
@@ -103,3 +103,48 @@
 3. 从`iconPath`中匹配到`Inspiration/FirstStrike/FirstStrike.png`，再转为全小写`inspiration/firststrike/firststrike.png`
 4. 最后拼接url`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/styles/{perkName}`得到`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/styles/inspiration/firststrike/firststrike.png`
 
+
+## 获取装备图标和信息
+
+> 获取方式和召唤师技能类似
+
+1. 从`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/zh_cn/v1/items.json`获取到装备的图标和描述信息
+
+2. 通过itemId在表中找到对应的数据，示例如下
+    ```javascript
+    {
+    "id": 1001,
+    "name": "鞋子",
+    "description": "<mainText><stats><attention>25</attention>移动速度</stats></mainText><br>",
+    "active": false,
+    "inStore": true,
+    "from": [
+        
+    ],
+    "to": [
+        3111,
+        3006,
+        3009,
+        3020,
+        3047,
+        3117,
+        3158
+    ],
+    "categories": [
+        "Boots"
+    ],
+    "maxStacks": 1,
+    "requiredChampion": "",
+    "requiredAlly": "",
+    "requiredBuffCurrencyName": "",
+    "requiredBuffCurrencyCost": 0,
+    "specialRecipe": 0,
+    "isEnchantment": false,
+    "price": 300,
+    "priceTotal": 300,
+    "iconPath": "/lol-game-data/assets/ASSETS/Items/Icons2D/1001_Class_T1_BootsofSpeed.png"
+    }
+    ```
+
+3. 从`iconPath`中匹配到`1001_Class_T1_BootsofSpeed.png`，再转为全小写`1001_class_t1_bootsofspeed.png`
+4. 最后拼接url`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/{itemName}`得到`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/1001_class_t1_bootsofspeed.png`
