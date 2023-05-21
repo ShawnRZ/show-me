@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, Ref, watch } from "vue";
-import { useSummonerStore } from "../stors/summoner";
-import { queryMatchHistory } from "../lcu";
-import { Match, MatchList, MatchHistory } from "../types/Match";
+import { useSummonerStore } from "@/stors/summoner";
+import { queryMatchHistory } from "@/lcu";
+import { Match, MatchList, MatchHistory } from "@/types/Match";
 import { fetch } from "@tauri-apps/api/http";
-import GameItem from "./GameItem.vue";
+import GameItem from "@/components/GameItem.vue";
 
 let end = 0;
 const summonerStore = useSummonerStore();
