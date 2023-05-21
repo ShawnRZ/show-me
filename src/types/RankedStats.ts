@@ -3,6 +3,7 @@
  */
 export interface RankedStats {
     earnedRegaliaRewardIds: string[];
+    // 当前赛季达到的最高段位,SR代表召唤师峡谷(Summoner Rift)
     highestCurrentSeasonReachedTierSR: LeagueTier;
     highestPreviousSeasonAchievedDivision: Division;
     highestPreviousSeasonAchievedTier: LeagueTier;

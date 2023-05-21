@@ -54,6 +54,7 @@ function close() {
       background-color: rgb(232, 17, 35);
     }
   }
+
   .icon {
     width: 20px;
     height: 20px;
