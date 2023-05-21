@@ -10,7 +10,7 @@ import asideCard from "@/layout/asideCard/index.vue";
         <headerCard></headerCard>
       </el-header>
       <el-container>
-        <el-aside width="200px">
+        <el-aside width="100px">
           <asideCard></asideCard>
         </el-aside>
         <el-main>
@@ -26,6 +26,9 @@ import asideCard from "@/layout/asideCard/index.vue";
   width: 100%;
   height: 100%;
   background-color: rgb(30, 30, 30);
+  .el-container {
+    height: calc(100% - 60px);
+  }
 }
 .el-header {
   padding: 0;

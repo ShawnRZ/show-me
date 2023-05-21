@@ -62,7 +62,7 @@ onMounted(async () => {
 });
 </script>
 <template>
-  <div class="self" @click="update">
+  <div class="user-info" @click="update">
     <div class="icon">
       <el-image
         class="img"
@@ -83,8 +83,8 @@ onMounted(async () => {
 </template>
 
 <style scoped lang="scss">
-.self {
-  width: 200px;
+.user-info {
+  width: 320px;
   .icon {
     height: 50px;
 

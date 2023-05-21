@@ -3,20 +3,29 @@ import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/",
+    redirect: "/home",
+  },
+  {
+    path: "/home",
     name: "home",
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/home/index.vue"),
 
+    meta: {
+      title: "首页",
+      icon: "home",
+    },
     // children: [],
   },
   {
     path: "/search",
     name: "search",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
     component: () =>
       import(/* webpackChunkName: "about" */ "../views/search/index.vue"),
+    meta: {
+      title: "搜索",
+      icon: "search",
+    },
   },
 ];
 

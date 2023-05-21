@@ -14,6 +14,7 @@ import WindowCtrl from "@/layout/headerCard/components/windowCtrl.vue";
 
 <style scoped lang="scss">
 .headerCard {
+  //background-color: #111022;
   display: flex;
   justify-content: space-between;
 }
