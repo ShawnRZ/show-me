@@ -27,10 +27,16 @@ import asideCard from "@/layout/asideCard/index.vue";
   height: 100%;
   background-color: rgb(30, 30, 30);
   .el-container {
-    height: calc(100% - 60px);
+    height: 100%;
   }
+  //.el-main {
+  //  height: calc(100% - 60px);
+  //}
 }
 .el-header {
+  padding: 0;
+}
+::v-deep(.el-main) {
   padding: 0;
 }
 </style>

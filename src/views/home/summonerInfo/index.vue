@@ -142,19 +142,13 @@ watch(
 </script>
 
 <template>
-  <div class="self">
+  <div class="user-card">
     <div class="profile">
       <el-skeleton :loading="!ready" :animated="true">
         <template #template>
           <div style="display: flex">
-            <el-skeleton-item
-              variant="image"
-              style="width: 100px; height: 100px; border-radius: 50%"
-            />
-            <el-skeleton-item
-              variant="rect"
-              style="width: 190px; height: 30px; margin-left: 20px"
-            />
+            <el-skeleton-item variant="image" class="te-img" />
+            <el-skeleton-item variant="rect" class="te-rect" />
           </div>
         </template>
         <template #default>
@@ -163,9 +157,9 @@ watch(
               :src="`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${summonerStore.querySummoner!.profileIconId}.jpg`"
               alt=""
             />
-            <span class="level">{{
-              summonerStore.querySummoner!.summonerLevel
-            }}</span>
+            <span class="level">
+              {{ summonerStore.querySummoner!.summonerLevel }}
+            </span>
           </div>
           <div class="info">
             <el-tooltip
@@ -183,27 +177,14 @@ watch(
 
     <el-card class="solo-rank">
       <template #header>
-        <div class="card-header">
-          <span>单双排</span>
-        </div>
+        <span>单双排</span>
       </template>
 
       <el-skeleton :loading="!ready" :animated="true">
         <template #template>
           <div style="display: flex">
-            <el-skeleton-item
-              variant="image"
-              style="width: 72px; height: 72px; border-radius: 50%"
-            />
-            <div
-              style="
-                width: 70%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                margin-left: 10px;
-              "
-            >
+            <el-skeleton-item variant="image" class="te-img" />
+            <div class="te-text">
               <el-skeleton-item variant="h3" style="width: 100%" />
               <el-skeleton-item
                 variant="h3"
@@ -226,8 +207,7 @@ watch(
                 <span class="division">{{ soloRankDivision }}</span>
               </div>
               <div class="lp">
-                <span>{{ soloLp }}</span
-                >LP
+                <span>{{ soloLp }}LP</span>
               </div>
             </div>
             <div class="win-lose">
@@ -241,27 +221,14 @@ watch(
     </el-card>
     <el-card class="flex-rank">
       <template #header>
-        <div class="card-header">
-          <span>灵活排位</span>
-        </div>
+        <span>灵活排位</span>
       </template>
 
       <el-skeleton :loading="!ready" :animated="true">
         <template #template style="display: flex">
           <div style="display: flex">
-            <el-skeleton-item
-              variant="image"
-              style="width: 72px; height: 72px; border-radius: 50%"
-            />
-            <div
-              style="
-                width: 70%;
-                display: flex;
-                flex-direction: column;
-                justify-content: center;
-                margin-left: 10px;
-              "
-            >
+            <el-skeleton-item variant="image" class="te-img" />
+            <div class="te-text">
               <el-skeleton-item variant="h3" style="width: 100%" />
               <el-skeleton-item
                 variant="h3"
@@ -284,8 +251,7 @@ watch(
                 <span class="division">{{ flexRankDivision }}</span>
               </div>
               <div class="lp">
-                <span>{{ flexLp }}</span
-                >LP
+                <span>{{ flexLp }}LP</span>
               </div>
             </div>
             <div class="win-lose">
@@ -301,77 +267,29 @@ watch(
 </template>
 
 <style scoped lang="scss">
-.self {
-  // background-color: red;
+.user-card {
   background-color: rgb(24, 24, 24);
   display: flex;
   flex-direction: column;
-  width: 350px;
-
-  .flex-rank,
-  .solo-rank {
-    // align-self: flex-start;
-    width: 330px;
-    // height: 170px;
-    margin-top: 10px;
-
-    .card-body {
-      display: flex;
-
-      // width: 320px;
-      .rank-level {
-        display: flex;
-        flex-direction: column;
-        // align-items: center;
-        justify-content: center;
-        margin-left: 10px;
-        flex-grow: 1;
-
-        .level {
-          font-size: 20px;
-          font-weight: 700;
-        }
-
-        .lp {
-          color: rgb(117, 133, 146);
-        }
-      }
-
-      .win-lose {
-        margin: auto 0px;
-        text-align: right;
-      }
-
-      .rank-icon {
-        img {
-          width: 72px;
-          height: 72px;
-          // background-color: rgb(247, 247, 249);
-          // border-radius: 50%;
-        }
-      }
-    }
-  }
-
+  align-items: center;
+  width: 370px;
+  height: 100%;
   .profile {
     display: flex;
     margin: 20px;
     width: 330px;
 
-    .info {
-      margin-left: 10px;
-
-      .summoner-name {
-        font-size: 24px;
-        font-weight: 700;
-        color: white;
-        max-width: 220px;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
+    .te-img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
     }
 
+    .te-rect {
+      width: 190px;
+      height: 30px;
+      margin-left: 20px;
+    }
     .icon {
       display: flex;
       flex-direction: column;
@@ -392,6 +310,73 @@ watch(
         padding: 0 8px;
         border-radius: 10px;
         background-color: rgb(32, 45, 55);
+      }
+    }
+    .info {
+      margin-left: 10px;
+
+      .summoner-name {
+        font-size: 24px;
+        font-weight: 700;
+        color: white;
+        max-width: 220px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+
+  .flex-rank,
+  .solo-rank {
+    // align-self: flex-start;
+    width: 330px;
+    // height: 170px;
+    margin-top: 10px;
+    .te-img {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+    }
+    .te-text {
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      margin-left: 10px;
+    }
+    .card-body {
+      display: flex;
+      .rank-icon {
+        img {
+          width: 72px;
+          height: 72px;
+          // background-color: rgb(247, 247, 249);
+          // border-radius: 50%;
+        }
+      }
+      // width: 320px;
+      .rank-level {
+        display: flex;
+        flex-direction: column;
+        // align-items: center;
+        justify-content: center;
+        margin-left: 10px;
+        flex-grow: 1;
+
+        .level {
+          font-size: 20px;
+          font-weight: 700;
+        }
+
+        .lp {
+          color: rgb(117, 133, 146);
+        }
+      }
+
+      .win-lose {
+        margin: auto 0;
+        text-align: right;
       }
     }
   }

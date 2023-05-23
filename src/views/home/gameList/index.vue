@@ -4,7 +4,7 @@ import { useSummonerStore } from "@/stors/summoner";
 import { queryMatchHistory } from "@/lcu";
 import { Match, MatchList, MatchHistory } from "@/types/Match";
 import { fetch } from "@tauri-apps/api/http";
-import GameItem from "@/components/GameItem.vue";
+import GameItem from "@/views/home/gameList/GameItem.vue";
 
 let end = 0;
 const summonerStore = useSummonerStore();
@@ -220,47 +220,56 @@ const init = async () => {
 </script>
 
 <template>
-  <div class="self" v-if="ready">
-    <el-scrollbar height="100%">
-      <ul
-        style="height: 100%"
-        v-infinite-scroll="loadMore"
-        :infinite-scroll-disabled="loading"
-      >
-        <li v-for="game in games" :key="game.gameCreation">
-          <GameItem
-            :game="game"
-            :spell-map="spellMap"
-            :runes-map="runesMap"
-            :item-map="itemMap"
-          />
-        </li>
-        <li v-if="loading && !finish">Loading...</li>
-        <li v-if="finish">加载完了</li>
-      </ul>
-    </el-scrollbar>
-    <GameDetail
-      :spell-map="spellMap"
-      :runes-map="runesMap"
-      :item-map="itemMap"
-    />
+  <div class="game-con">
+    <el-row justify="space-evenly"> </el-row>
+    <!--    <el-scrollbar height="100%">-->
+    <!--      <div-->
+    <!--        v-for="i in 20"-->
+    <!--        :key="i"-->
+    <!--        style="width: 100%; height: 40px; background-color: pink"-->
+    <!--      ></div>-->
+    <!--            <ul-->
+    <!--              style="height: 100%"-->
+    <!--              v-infinite-scroll="loadMore"-->
+    <!--              :infinite-scroll-disabled="loading"-->
+    <!--            >-->
+    <!--              <li v-for="game in games" :key="game.gameCreation">-->
+    <!--                <GameItem-->
+    <!--                  :game="game"-->
+    <!--                  :spell-map="spellMap"-->
+    <!--                  :runes-map="runesMap"-->
+    <!--                  :item-map="itemMap"-->
+    <!--                />-->
+    <!--              </li>-->
+    <!--              <li v-if="loading && !finish">Loading...</li>-->
+    <!--              <li v-if="finish">加载完了</li>-->
+    <!--            </ul>-->
+    <!--    </el-scrollbar>-->
+    <!--        <GameDetail-->
+    <!--          :spell-map="spellMap"-->
+    <!--          :runes-map="runesMap"-->
+    <!--          :item-map="itemMap"-->
+    <!--        />-->
   </div>
 </template>
 
 <style lang="scss" scoped>
-.self {
-  display: flex;
+.game-con {
+  width: 100%;
+  height: 100%;
+  //background-color: skyblue;
+  //display: flex;
 
-  ul {
-    margin: 0px;
-    padding: 0px;
-
-    li {
-      list-style: none;
-      padding: 0px;
-      margin: 5px;
-      margin-right: 10px;
-    }
-  }
+  //ul {
+  //  margin: 0px;
+  //  padding: 0px;
+  //
+  //  li {
+  //    list-style: none;
+  //    padding: 0px;
+  //    margin: 5px;
+  //    margin-right: 10px;
+  //  }
+  //}
 }
 </style>
