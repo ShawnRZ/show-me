@@ -496,16 +496,16 @@ async function query(gameId: number) {
         </div>
         <div class="minions-gold">
           <div class="gold">
-            <img src="../assets/icon_gold.png" alt="" />
+            <img src="../../../../assets/icon_gold.png" alt="" />
             <span>{{ game.participants[0].stats.goldEarned }}</span>
           </div>
           <div class="minions">
-            <img src="../assets/icon_minions.png" alt="" />
+            <img src="../../../../assets/icon_minions.png" alt="" />
             <span>{{ game.participants[0].stats.totalMinionsKilled }}</span>
           </div>
         </div>
         <div class="damage">
-          <img src="../assets/kills.png" alt="" />
+          <img src="../../../../assets/kills.png" alt="" />
           <span>{{
             game.participants[0].stats.totalDamageDealtToChampions
           }}</span>
