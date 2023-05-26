@@ -1,60 +1,67 @@
-<script setup lang="ts">
-import { useConfigStore } from "@/stors/config";
+<script setup>
 import { useSummonerStore } from "@/stors/summoner";
-import { computed } from "vue";
-import { fetch } from "@tauri-apps/api/http";
-import { updateCurrentSummoner, updateCommandLine } from "@/lcu";
+// import { computed } from "vue";
+
 import { onMounted } from "vue";
+import { getCurrentSummoner } from "@/API/userInfo.js";
+import { updateCommandLine } from "@/utils/base.js";
 
 const summonerStore = useSummonerStore();
-const configStore = useConfigStore();
-
-const percentage = computed(() => {
-  if (!summonerStore.currentSummoner) {
-    return 100;
-  }
-  return Math.floor(
-    (summonerStore.currentSummoner.xpSinceLastLevel /
-      summonerStore.currentSummoner.xpUntilNextLevel) *
-      100
-  );
-});
-const profileIconId = computed(() => {
-  if (!summonerStore.currentSummoner) {
-    return 29;
-  }
-  return summonerStore.currentSummoner.profileIconId;
-});
-const summonerName = computed(() => {
-  if (!summonerStore.currentSummoner) {
-    return "点击连接客户端";
-  }
-  return summonerStore.currentSummoner.displayName;
-});
+// const configStore = useConfigStore();
+//
+// const percentage = computed(() => {
+//   if (!summonerStore.currentSummoner) {
+//     return 100;
+//   }
+//   return Math.floor(
+//     (summonerStore.currentSummoner.xpSinceLastLevel /
+//       summonerStore.currentSummoner.xpUntilNextLevel) *
+//       100
+//   );
+// });
+// const profileIconId = computed(() => {
+//   if (!summonerStore.currentSummoner) {
+//     return 29;
+//   }
+//   return summonerStore.currentSummoner.profileIconId;
+// });
+// const summonerName = computed(() => {
+//   if (!summonerStore.currentSummoner) {
+//     return "点击连接客户端";
+//   }
+//   return summonerStore.currentSummoner.displayName;
+// });
 
 // 更新当前召唤师，失败就重新获取客户端参数再试
 const update = async () => {
-  try {
-    await updateCommandLine();
-    await updateCurrentSummoner();
-    summonerStore.querySummoner = summonerStore.currentSummoner;
-    configStore.ready = true;
-    ElNotification({
-      title: "更新当前召唤师",
-      message: summonerStore.currentSummoner!.displayName,
-      position: "bottom-right",
-      type: "success",
-    });
-  } catch (error) {
-    configStore.ready = false;
-    ElNotification({
-      title: "更新当前召唤师失败",
-      // message: '请启动客户端并使用管理员权限启动本程序',
-      message: `${error}`,
-      position: "bottom-right",
-      type: "warning",
-    });
-  }
+  await updateCommandLine();
+  getCurrentSummoner().then((data) => {
+    console.log(data);
+    const summonerStore = useSummonerStore();
+    summonerStore.currentSummoner = data;
+    // console.log('当前召唤师：', summonerStore.currentSummoner);
+  });
+  // try {
+  // await updateCommandLine();
+  // await updateCurrentSummoner();
+  //   summonerStore.querySummoner = summonerStore.currentSummoner;
+  //   configStore.ready = true;
+  //   ElNotification({
+  //     title: "更新当前召唤师",
+  //     message: summonerStore.currentSummoner!.displayName,
+  //     position: "bottom-right",
+  //     type: "success",
+  //   });
+  // } catch (error) {
+  //   configStore.ready = false;
+  //   ElNotification({
+  //     title: "更新当前召唤师失败",
+  //     // message: '请启动客户端并使用管理员权限启动本程序',
+  //     message: `${error}`,
+  //     position: "bottom-right",
+  //     type: "warning",
+  //   });
+  // }
 };
 
 onMounted(async () => {

@@ -9,7 +9,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/home",
     name: "home",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/home/index.vue"),
+      import(/* webpackChunkName: "about" */ "@/views/home/index.vue"),
 
     meta: {
       title: "首页",
@@ -21,7 +21,7 @@ const routes: Array<RouteRecordRaw> = [
     path: "/search",
     name: "search",
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/search/index.vue"),
+      import(/* webpackChunkName: "about" */ "@/views/search/index.vue"),
     meta: {
       title: "搜索",
       icon: "search",
