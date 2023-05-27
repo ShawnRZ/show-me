@@ -14,3 +14,11 @@ export function getCurrentSummoner() {
     method: "get",
   });
 }
+export function getQuerySummoner(query) {
+  console.log(query);
+  return request({
+    url: "/lol-summoner/v1/summoners",
+    method: "get",
+    query,
+  });
+}

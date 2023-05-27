@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script setup>
 import { computed, ref } from "vue";
 import {
   Document,
@@ -8,10 +8,10 @@ import {
 } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
 const isCollapse = ref(true);
-const handleOpen = (key: string, keyPath: string[]) => {
+const handleOpen = (key, keyPath) => {
   console.log(key, keyPath);
 };
-const handleClose = (key: string, keyPath: string[]) => {
+const handleClose = (key, keyPath) => {
   console.log(key, keyPath);
 };
 const router = useRouter();
@@ -38,13 +38,6 @@ const routers = computed(() => {
       <div :class="['icon-box', item.path === path ? 'active ' : '']">
         <svg-icon :name="item.meta.icon || ''" class="svg-icon"></svg-icon>
       </div>
-      <!--      <template #title>{{ item.meta.title }}</template>-->
-      <!--      <el-menu-item-->
-      <!--        v-for="(item2, index2) in item.children"-->
-      <!--        :class="path == item2.path ? 'is-active' : ''"-->
-      <!--      >-->
-      <!--        {{ item.name }}-->
-      <!--      </el-menu-item>-->
     </el-menu-item>
   </el-menu>
 </template>

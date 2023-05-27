@@ -1,6 +1,7 @@
 import { invoke } from "@tauri-apps/api";
-import { ElNotification } from "element-plus";
-import { setPort, setToken } from "@/localStorage/config.js";
+import { useConfigStore } from "@/stors/store/config.js";
+
+import pinia from "@/stors/pinia.js";
 
 export function deepCopy(obj) {
   return JSON.parse(JSON.stringify(obj));
@@ -16,10 +17,9 @@ export function getNowDate() {
 
   return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
-export function $Message(message, type) {
+export function $Message(title, message, type) {
   ElNotification({
-    title: "更新当前召唤师失败",
-    // message: '请启动客户端并使用管理员权限启动本程序',
+    title: title,
     message: message,
     position: "bottom-right",
     type: type,
@@ -33,11 +33,16 @@ export function updateCommandLine() {
   return new Promise(async (resolve, reject) => {
     let res = await invoke("get_command_line");
     if (res[0] === "" || res[1] === "") {
-      $Message("获取客户端参数失败,请重启客户端！", "warning");
+      $Message(
+        "获取客户端参数失败!",
+        "获取客户端参数失败,请重启客户端！",
+        "warning"
+      );
       reject("获取客户端参数失败,请重启客户端！");
     }
-    setPort(res[1]);
-    setToken(res[0]);
+    const configStore = useConfigStore(pinia);
+    configStore.setPort(res[1]);
+    configStore.setToken(res[0]);
     resolve();
   });
 }

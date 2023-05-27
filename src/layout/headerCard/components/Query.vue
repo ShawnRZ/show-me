@@ -1,42 +1,33 @@
-<script setup lang="ts">
+<script setup>
 import { ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
-// import { useConfigStore, useSummonerStore } from '../store';
-import { useConfigStore } from "@/stors/config";
-import { useSummonerStore } from "@/stors/summoner";
-import { querySummonerByName } from "@/lcu";
+import { getQuerySummoner } from "@/API/layout.js";
+import { $Message } from "@/utils/base.js";
+import { queryCurrentSummonerStore } from "@/stors/store/summoner.js";
+import { useConfigStore } from "@/stors/store/config.js";
+const configStore = useConfigStore();
 
 // 顾北清歌扬
 const queryName = ref("");
-
-const summonerStore = useSummonerStore();
-const configStore = useConfigStore();
+const querySummoner = queryCurrentSummonerStore();
 
 const query = async () => {
-  try {
-    if (queryName.value == "") {
-      ElNotification({
-        title: `请输入召唤师名字`,
-        position: "bottom-right",
-        type: "warning",
-      });
-      return;
-    }
-    await querySummonerByName(queryName.value);
-    ElNotification({
-      title: "查询召唤师",
-      message: `${queryName.value}`,
-      position: "bottom-right",
-      type: "success",
-    });
-  } catch (error) {
-    ElNotification({
-      title: "失败",
-      message: `${error}: ${queryName.value}`,
-      position: "bottom-right",
-      type: "warning",
-    });
+  if (queryName.value === "") {
+    $Message("请输入召唤师名字!", "", "warning");
+    return;
   }
+  getQuerySummoner({ name: queryName.value })
+    .then((data) => {
+      querySummoner.setSummoner(data);
+      $Message("查询召唤师", `${queryName.value}`, "success");
+    })
+    .catch((e) => {
+      if (e === 404) {
+        $Message("失败!", `召唤师不存在:${queryName.value}！`, "warning");
+      } else {
+        $Message("失败!", `${e}！`, "warning");
+      }
+    });
 };
 </script>
 
@@ -44,14 +35,14 @@ const query = async () => {
   <div class="query-input">
     <el-input
       v-model="queryName"
-      :disabled="!configStore.ready"
+      :disabled="!configStore.getIsReady"
       placeholder="Please input"
       size="large"
       @keyup.enter.native="query"
     >
       <template #append>
         <el-button
-          :disabled="!configStore.ready"
+          :disabled="!configStore.getIsReady"
           :icon="Search"
           @click="query"
         />

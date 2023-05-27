@@ -1,67 +1,51 @@
 <script setup>
-import { useSummonerStore } from "@/stors/summoner";
-// import { computed } from "vue";
+import { onMounted, ref } from "vue";
+import { getCurrentSummoner } from "@/API/layout.js";
+import { $Message, updateCommandLine } from "@/utils/base";
+import { useCurrentSummonerStore } from "@/stors/store/summoner.js";
+import { useConfigStore } from "@/stors/store/config.js";
+import { ElNotification } from "element-plus";
 
-import { onMounted } from "vue";
-import { getCurrentSummoner } from "@/API/userInfo.js";
-import { updateCommandLine } from "@/utils/base.js";
+const currentSummoner = useCurrentSummonerStore();
+const configStore = useConfigStore();
+// 当前召唤师
 
-const summonerStore = useSummonerStore();
-// const configStore = useConfigStore();
-//
-// const percentage = computed(() => {
-//   if (!summonerStore.currentSummoner) {
-//     return 100;
-//   }
-//   return Math.floor(
-//     (summonerStore.currentSummoner.xpSinceLastLevel /
-//       summonerStore.currentSummoner.xpUntilNextLevel) *
-//       100
-//   );
-// });
-// const profileIconId = computed(() => {
-//   if (!summonerStore.currentSummoner) {
-//     return 29;
-//   }
-//   return summonerStore.currentSummoner.profileIconId;
-// });
-// const summonerName = computed(() => {
-//   if (!summonerStore.currentSummoner) {
-//     return "点击连接客户端";
-//   }
-//   return summonerStore.currentSummoner.displayName;
-// });
-
+// 召唤师头像id
+let profileIconId = ref(29);
+// 召唤师名称
+let summonerName = ref("点击连接客户端");
+// 召唤师经验进度条
+let percentage = ref(100);
+const setPercentage = () => {
+  if (!currentSummoner.getSummoner) {
+    percentage.value = 100;
+  }
+  percentage.value = Math.floor(
+    (currentSummoner.getSummoner.xpSinceLastLevel /
+      currentSummoner.getSummoner.xpUntilNextLevel) *
+      100
+  );
+};
 // 更新当前召唤师，失败就重新获取客户端参数再试
 const update = async () => {
   await updateCommandLine();
-  getCurrentSummoner().then((data) => {
-    console.log(data);
-    const summonerStore = useSummonerStore();
-    summonerStore.currentSummoner = data;
-    // console.log('当前召唤师：', summonerStore.currentSummoner);
-  });
-  // try {
-  // await updateCommandLine();
-  // await updateCurrentSummoner();
-  //   summonerStore.querySummoner = summonerStore.currentSummoner;
-  //   configStore.ready = true;
-  //   ElNotification({
-  //     title: "更新当前召唤师",
-  //     message: summonerStore.currentSummoner!.displayName,
-  //     position: "bottom-right",
-  //     type: "success",
-  //   });
-  // } catch (error) {
-  //   configStore.ready = false;
-  //   ElNotification({
-  //     title: "更新当前召唤师失败",
-  //     // message: '请启动客户端并使用管理员权限启动本程序',
-  //     message: `${error}`,
-  //     position: "bottom-right",
-  //     type: "warning",
-  //   });
-  // }
+  getCurrentSummoner()
+    .then((data) => {
+      currentSummoner.setSummoner(data);
+      profileIconId.value = data.profileIconId || 29;
+      summonerName.value = data.displayName || "点击连接客户端";
+      setPercentage();
+      configStore.setIsReady(true);
+      $Message(
+        "更新当前召唤师",
+        currentSummoner.getSummoner?.displayName,
+        "success"
+      );
+    })
+    .catch((e) => {
+      configStore.setIsReady(false);
+      $Message("更新当前召唤师失败!", e, "warning");
+    });
 };
 
 onMounted(async () => {

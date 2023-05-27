@@ -9,18 +9,18 @@ import asideCard from "@/layout/asideCard/index.vue";
       <el-header>
         <headerCard></headerCard>
       </el-header>
-      <!--      <el-container>-->
-      <!--        <el-aside width="100px">-->
-      <!--          <asideCard></asideCard>-->
-      <!--        </el-aside>-->
-      <!--        <el-main>-->
-      <!--          <router-view v-slot="{ Component }">-->
-      <!--            <keep-alive>-->
-      <!--              <component :is="Component" />-->
-      <!--            </keep-alive>-->
-      <!--          </router-view>-->
-      <!--        </el-main>-->
-      <!--      </el-container>-->
+      <el-container>
+        <el-aside width="100px">
+          <asideCard></asideCard>
+        </el-aside>
+        <el-main>
+          <router-view v-slot="{ Component }">
+            <keep-alive>
+              <component :is="Component" />
+            </keep-alive>
+          </router-view>
+        </el-main>
+      </el-container>
     </el-container>
   </div>
 </template>
