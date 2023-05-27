@@ -12,12 +12,20 @@ const configStore = useConfigStore();
 const rankedStats: Ref<RankedStats | null> = ref(null);
 const ready = ref(false);
 
+// solo为单双排，flex为灵活排位
+
+// 用于显示段位图标
 const soloRankIcon = ref("unranked")
+// 段位的中文名称
 const soloRankTier = ref("")
+// 段位的细分等级："I" | "II" | "III" | "IV" | "V" | "NA"
 const soloRankDivision = ref("")
+// 胜点
 const soloLp = ref(0)
+// 胜负对局数
 const soloWin = ref(0)
 const soloLose = ref(0)
+// 胜率，如果对局总数为0则胜率为0
 const soloWinRate = computed(() => {
     if (soloLose.value + soloWin.value === 0) {
         return 0;
@@ -25,6 +33,7 @@ const soloWinRate = computed(() => {
     return Math.floor(soloWin.value / (soloLose.value + soloWin.value) * 100)
 })
 
+// 参考solo
 const flexRankIcon = ref("unranked")
 const flexRankTier = ref("")
 const flexRankDivision = ref("")
@@ -38,6 +47,7 @@ const flexWinRate = computed(() => {
     return Math.floor(flexWin.value / (flexLose.value + flexWin.value) * 100)
 })
 
+// 将段位名称转换成中文
 //  "NONE" | "IRON" | "BRONZE" | "SILVER" | "GOLD" | "PLATINUM" | "DIAMOND" | "MASTER" | "GRANDMASTER" | "CHALLENGER"
 const switchTier = (tier: string) => {
     switch (tier) {
@@ -77,17 +87,24 @@ watch(
             if (rankedStats.value === null) {
                 return;
             }
+            // 获取单双排段位图标名称
             soloRankIcon.value = (rankedStats.value as RankedStats).queueMap["RANKED_SOLO_5x5"].tier.toLowerCase();
+            // 如果图标名称为none，则改为unranked
             soloRankIcon.value = soloRankIcon.value === 'none' ? 'unranked' : soloRankIcon.value = soloRankIcon.value;
+            // 获取中文段位名称
             soloRankTier.value = switchTier((rankedStats.value as RankedStats).queueMap["RANKED_SOLO_5x5"].tier);
+            // 获取段位等级："I" | "II" | "III" | "IV" | "V" | "NA"
             soloRankDivision.value = (rankedStats.value as RankedStats).queueMap["RANKED_SOLO_5x5"].division;
             if (soloRankDivision.value === 'NA') {
                 soloRankDivision.value = ''
             }
+            // 获取当前单双排胜点
             soloLp.value = (rankedStats.value as RankedStats).queueMap["RANKED_SOLO_5x5"].leaguePoints;
+            // 获取单双排胜负对局数
             soloLose.value = (rankedStats.value as RankedStats).queueMap["RANKED_SOLO_5x5"].losses;
             soloWin.value = (rankedStats.value as RankedStats).queueMap["RANKED_SOLO_5x5"].wins;
 
+            // 以下为灵活排位数据，与单双排类似
             flexRankIcon.value = (rankedStats.value as RankedStats).queueMap["RANKED_FLEX_SR"].tier.toLowerCase();
             flexRankIcon.value = flexRankIcon.value === 'none' ? 'unranked' : flexRankIcon.value = flexRankIcon.value;
             flexRankTier.value = switchTier((rankedStats.value as RankedStats).queueMap["RANKED_FLEX_SR"].tier);
