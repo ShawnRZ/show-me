@@ -1,21 +1,9 @@
 <script setup>
-import { computed, ref } from "vue";
-import {
-  Document,
-  Menu as IconMenu,
-  Location,
-  Setting,
-} from "@element-plus/icons-vue";
+import { computed, inject } from "vue";
+
 import { useRouter } from "vue-router";
-const isCollapse = ref(true);
-const handleOpen = (key, keyPath) => {
-  console.log(key, keyPath);
-};
-const handleClose = (key, keyPath) => {
-  console.log(key, keyPath);
-};
+
 const router = useRouter();
-console.log(router);
 const path = computed(() => {
   return router.currentRoute.value.fullPath;
 });
@@ -25,6 +13,13 @@ const routers = computed(() => {
     return item.name;
   });
 });
+const reLoad = inject("reLoad");
+const menuClick = (menu) => {
+  if (menu.index === path.value) {
+    console.log(reLoad());
+    reLoad();
+  }
+};
 </script>
 
 <template>
@@ -34,7 +29,7 @@ const routers = computed(() => {
     class="el-menu-vertical-demo"
     :collapse="true"
   >
-    <el-menu-item v-for="item in routers" :index="item.path">
+    <el-menu-item v-for="item in routers" :index="item.path" @click="menuClick">
       <div :class="['icon-box', item.path === path ? 'active ' : '']">
         <svg-icon :name="item.meta.icon || ''" class="svg-icon"></svg-icon>
       </div>

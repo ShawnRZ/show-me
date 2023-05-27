@@ -1,4 +1,6 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+console.log(1);
+</script>
 
 <template>搜索</template>
 

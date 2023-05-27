@@ -1,6 +1,15 @@
 <script setup>
 import headerCard from "@/layout/headerCard/index.vue";
 import asideCard from "@/layout/asideCard/index.vue";
+import { nextTick, provide, ref } from "vue";
+let isRouterLive = ref(true);
+const reLoad = () => {
+  isRouterLive.value = false;
+  nextTick(() => {
+    isRouterLive.value = true;
+  });
+};
+provide("reLoad", reLoad);
 </script>
 
 <template>
@@ -14,11 +23,13 @@ import asideCard from "@/layout/asideCard/index.vue";
           <asideCard></asideCard>
         </el-aside>
         <el-main>
-          <router-view v-slot="{ Component }">
-            <keep-alive>
-              <component :is="Component" />
-            </keep-alive>
-          </router-view>
+          <template v-if="isRouterLive">
+            <router-view v-slot="{ Component }">
+              <keep-alive>
+                <component :is="Component" />
+              </keep-alive>
+            </router-view>
+          </template>
         </el-main>
       </el-container>
     </el-container>

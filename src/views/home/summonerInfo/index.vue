@@ -1,150 +1,50 @@
-<script setup lang="ts">
-import { computed, ref, Ref, watch } from "vue";
-import { queryRankStats } from "@/lcu";
-import { RankedStats } from "@/types/RankedStats";
-import { useConfigStore } from "@/stors/config";
-import { useSummonerStore } from "@/stors/summoner";
+<script setup>
+import { computed, nextTick, ref, watch } from "vue";
+import { deepCopy } from "@/utils/base";
+import { queryCurrentSummonerStore } from "@/stors/store/summoner.js";
+import { getRankStatus } from "@/API/home.js";
+import { switchTier } from "@/views/home/summonerInfo/source.js";
+import { RankStatus } from "@/modules/RankStatus.js";
 
-const summonerStore = useSummonerStore();
-const configStore = useConfigStore();
-
-const rankedStats: Ref<RankedStats | null> = ref(null);
-const ready = ref(false);
-
-const soloRankIcon = ref("unranked");
-const soloRankTier = ref("");
-const soloRankDivision = ref("");
-const soloLp = ref(0);
-const soloWin = ref(0);
-const soloLose = ref(0);
-const soloWinRate = computed(() => {
-  if (soloLose.value + soloWin.value === 0) {
-    return 0;
-  }
-  return Math.floor((soloWin.value / (soloLose.value + soloWin.value)) * 100);
-});
-
-const flexRankIcon = ref("unranked");
-const flexRankTier = ref("");
-const flexRankDivision = ref("");
-const flexLp = ref(0);
-const flexWin = ref(0);
-const flexLose = ref(0);
-const flexWinRate = computed(() => {
-  if (flexLose.value + flexWin.value === 0) {
-    return 0;
-  }
-  return Math.floor((flexWin.value / (flexLose.value + flexWin.value)) * 100);
-});
-
-//  "NONE" | "IRON" | "BRONZE" | "SILVER" | "GOLD" | "PLATINUM" | "DIAMOND" | "MASTER" | "GRANDMASTER" | "CHALLENGER"
-const switchTier = (tier: string) => {
-  switch (tier) {
-    case "IRON":
-      return "无畏黑铁";
-    case "BRONZE":
-      return "英勇黄铜";
-    case "SILVER":
-      return "不屈白银";
-    case "GOLD":
-      return "荣耀黄金";
-    case "PLATINUM":
-      return "华贵铂金";
-    case "DIAMOND":
-      return "璀璨钻石";
-    case "MASTER":
-      return "超凡大师";
-    case "GRANDMASTER":
-      return "傲世宗师";
-    case "CHALLENGER":
-      return "最强王者";
-  }
-  return "";
-};
-
-const querySummoner = computed(() => {
-  return summonerStore.querySummoner!.puuid;
-});
-
-// 监听数据
-watch(
-  querySummoner,
-  () => {
-    ready.value = false;
-    queryRankStats(summonerStore.querySummoner!.puuid)
-      .then((res) => {
-        rankedStats.value = res;
-        if (rankedStats.value === null) {
-          return;
-        }
-        soloRankIcon.value = (rankedStats.value as RankedStats).queueMap[
-          "RANKED_SOLO_5x5"
-        ].tier.toLowerCase();
-        soloRankIcon.value =
-          soloRankIcon.value === "none"
-            ? "unranked"
-            : (soloRankIcon.value = soloRankIcon.value);
-        soloRankTier.value = switchTier(
-          (rankedStats.value as RankedStats).queueMap["RANKED_SOLO_5x5"].tier
-        );
-        soloRankDivision.value = (rankedStats.value as RankedStats).queueMap[
-          "RANKED_SOLO_5x5"
-        ].division;
-        if (soloRankDivision.value === "NA") {
-          soloRankDivision.value = "";
-        }
-        soloLp.value = (rankedStats.value as RankedStats).queueMap[
-          "RANKED_SOLO_5x5"
-        ].leaguePoints;
-        soloLose.value = (rankedStats.value as RankedStats).queueMap[
-          "RANKED_SOLO_5x5"
-        ].losses;
-        soloWin.value = (rankedStats.value as RankedStats).queueMap[
-          "RANKED_SOLO_5x5"
-        ].wins;
-
-        flexRankIcon.value = (rankedStats.value as RankedStats).queueMap[
-          "RANKED_FLEX_SR"
-        ].tier.toLowerCase();
-        flexRankIcon.value =
-          flexRankIcon.value === "none"
-            ? "unranked"
-            : (flexRankIcon.value = flexRankIcon.value);
-        flexRankTier.value = switchTier(
-          (rankedStats.value as RankedStats).queueMap["RANKED_FLEX_SR"].tier
-        );
-        flexRankDivision.value = (rankedStats.value as RankedStats).queueMap[
-          "RANKED_FLEX_SR"
-        ].division;
-        if (flexRankDivision.value === "NA") {
-          flexRankDivision.value = "";
-        }
-        flexLp.value = (rankedStats.value as RankedStats).queueMap[
-          "RANKED_FLEX_SR"
-        ].leaguePoints;
-        flexLose.value = (rankedStats.value as RankedStats).queueMap[
-          "RANKED_FLEX_SR"
-        ].losses;
-        flexWin.value = (rankedStats.value as RankedStats).queueMap[
-          "RANKED_FLEX_SR"
-        ].wins;
-
-        ready.value = true;
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+const props = defineProps({
+  summoner: {
+    type: Object,
+    default: "",
   },
-  {
-    immediate: true,
-  }
-);
+});
+let summoner = ref({});
+let loading = ref(false);
+let soloCard = ref({});
+let flexCard = ref({});
+const init = () => {
+  // 获取rank详情
+  getRankStatus(summoner.value.puuid).then((data) => {
+    const { RANKED_SOLO_5x5, RANKED_FLEX_SR } = data.queueMap;
+    soloCard.value = new RankStatus(RANKED_SOLO_5x5);
+    flexCard.value = new RankStatus(RANKED_FLEX_SR);
+  });
+  loading.value = true;
+};
+summoner.value = deepCopy(props.summoner);
+
+init();
+
+const queryCurrentSummoner = queryCurrentSummonerStore();
+const querySummoner = computed(() => {
+  return queryCurrentSummoner.getSummoner;
+});
+watch(querySummoner, () => {
+  nextTick(() => {
+    summoner.value = deepCopy(querySummoner.value);
+    init();
+  });
+});
 </script>
 
 <template>
   <div class="user-card">
     <div class="profile">
-      <el-skeleton :loading="!ready" :animated="true">
+      <el-skeleton :loading="!loading" :animated="true">
         <template #template>
           <div style="display: flex">
             <el-skeleton-item variant="image" class="te-img" />
@@ -154,20 +54,17 @@ watch(
         <template #default>
           <div class="icon">
             <img
-              :src="`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${summonerStore.querySummoner!.profileIconId}.jpg`"
+              :src="`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${summoner.profileIconId}.jpg`"
               alt=""
             />
             <span class="level">
-              {{ summonerStore.querySummoner!.summonerLevel }}
+              {{ summoner.summonerLevel }}
             </span>
           </div>
           <div class="info">
-            <el-tooltip
-              :content="summonerStore.querySummoner!.displayName"
-              placement="bottom"
-            >
+            <el-tooltip :content="summoner.displayName" placement="bottom">
               <div class="summoner-name">
-                {{ summonerStore.querySummoner!.displayName }}
+                {{ summoner.displayName }}
               </div>
             </el-tooltip>
           </div>
@@ -180,7 +77,7 @@ watch(
         <span>单双排</span>
       </template>
 
-      <el-skeleton :loading="!ready" :animated="true">
+      <el-skeleton :loading="!loading" :animated="true">
         <template #template>
           <div style="display: flex">
             <el-skeleton-item variant="image" class="te-img" />
@@ -197,72 +94,72 @@ watch(
           <div class="card-body">
             <div class="rank-icon">
               <img
-                :src="`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${soloRankIcon}.png`"
+                :src="`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${soloCard.rankIcon}.png`"
                 alt=""
               />
             </div>
             <div class="rank-level">
               <div class="level">
-                <span class="tier">{{ soloRankTier }}</span>
-                <span class="division">{{ soloRankDivision }}</span>
+                <span class="tier">{{ soloCard.rankTier }}</span>
+                <span class="division">{{ soloCard.rankDivision }}</span>
               </div>
               <div class="lp">
-                <span>{{ soloLp }}LP</span>
+                <span>{{ soloCard.Lp }}LP</span>
               </div>
             </div>
             <div class="win-lose">
-              {{ soloWin }}胜{{ soloLose }}负
+              {{ soloCard.Win }}胜{{ soloCard.Lose }}负
               <br />
-              胜率{{ soloWinRate }}%
+              胜率{{ soloCard.winRate }}%
             </div>
           </div>
         </template>
       </el-skeleton>
     </el-card>
-    <el-card class="flex-rank">
-      <template #header>
-        <span>灵活排位</span>
-      </template>
+    <!--    <el-card class="flex-rank">-->
+    <!--      <template #header>-->
+    <!--        <span>灵活排位</span>-->
+    <!--      </template>-->
 
-      <el-skeleton :loading="!ready" :animated="true">
-        <template #template style="display: flex">
-          <div style="display: flex">
-            <el-skeleton-item variant="image" class="te-img" />
-            <div class="te-text">
-              <el-skeleton-item variant="h3" style="width: 100%" />
-              <el-skeleton-item
-                variant="h3"
-                style="width: 100%; margin-top: 10px"
-              />
-            </div>
-          </div>
-        </template>
-        <template #default>
-          <div class="card-body">
-            <div class="rank-icon">
-              <img
-                :src="`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${flexRankIcon}.png`"
-                alt=""
-              />
-            </div>
-            <div class="rank-level">
-              <div class="level">
-                <span class="tier">{{ flexRankTier }}</span>
-                <span class="division">{{ flexRankDivision }}</span>
-              </div>
-              <div class="lp">
-                <span>{{ flexLp }}LP</span>
-              </div>
-            </div>
-            <div class="win-lose">
-              {{ flexWin }}胜{{ flexLose }}负
-              <br />
-              胜率{{ flexWinRate }}%
-            </div>
-          </div>
-        </template>
-      </el-skeleton>
-    </el-card>
+    <!--      <el-skeleton :loading="!ready" :animated="true">-->
+    <!--        <template #template style="display: flex">-->
+    <!--          <div style="display: flex">-->
+    <!--            <el-skeleton-item variant="image" class="te-img" />-->
+    <!--            <div class="te-text">-->
+    <!--              <el-skeleton-item variant="h3" style="width: 100%" />-->
+    <!--              <el-skeleton-item-->
+    <!--                variant="h3"-->
+    <!--                style="width: 100%; margin-top: 10px"-->
+    <!--              />-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--        </template>-->
+    <!--        <template #default>-->
+    <!--          <div class="card-body">-->
+    <!--            <div class="rank-icon">-->
+    <!--              <img-->
+    <!--                :src="`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${flexRankIcon}.png`"-->
+    <!--                alt=""-->
+    <!--              />-->
+    <!--            </div>-->
+    <!--            <div class="rank-level">-->
+    <!--              <div class="level">-->
+    <!--                <span class="tier">{{ flexRankTier }}</span>-->
+    <!--                <span class="division">{{ flexRankDivision }}</span>-->
+    <!--              </div>-->
+    <!--              <div class="lp">-->
+    <!--                <span>{{ flexLp }}LP</span>-->
+    <!--              </div>-->
+    <!--            </div>-->
+    <!--            <div class="win-lose">-->
+    <!--              {{ flexWin }}胜{{ flexLose }}负-->
+    <!--              <br />-->
+    <!--              胜率{{ flexWinRate }}%-->
+    <!--            </div>-->
+    <!--          </div>-->
+    <!--        </template>-->
+    <!--            </el-skeleton>-->
+    <!--    </el-card>-->
   </div>
 </template>
 

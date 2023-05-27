@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { inject, ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { getQuerySummoner } from "@/API/layout.js";
 import { $Message } from "@/utils/base.js";
@@ -22,6 +22,7 @@ const query = async () => {
       $Message("查询召唤师", `${queryName.value}`, "success");
     })
     .catch((e) => {
+      querySummoner.setSummoner({});
       if (e === 404) {
         $Message("失败!", `召唤师不存在:${queryName.value}！`, "warning");
       } else {

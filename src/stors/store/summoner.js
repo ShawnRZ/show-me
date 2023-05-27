@@ -10,8 +10,8 @@ export const useCurrentSummonerStore = defineStore("Summoner", {
     },
   },
   actions: {
-    setSummoner(Summoner) {
-      this.Summoner = Summoner;
+    setSummoner(summoner) {
+      this.Summoner = new Summoner(summoner);
     },
   },
 });
@@ -25,8 +25,8 @@ export const queryCurrentSummonerStore = defineStore("Summoner", {
     },
   },
   actions: {
-    setSummoner(Summoner) {
-      this.Summoner = Summoner;
+    setSummoner(summoner) {
+      this.Summoner = new Summoner(summoner);
     },
   },
 });

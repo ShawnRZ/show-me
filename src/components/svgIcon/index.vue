@@ -1,10 +1,16 @@
-<script setup lang="ts">
+<script setup>
 import { computed } from "vue";
 
-const props = defineProps<{
-  name: string;
-  color: string;
-}>();
+const props = defineProps({
+  name: {
+    type: String,
+    default: "",
+  },
+  color: {
+    type: String,
+    default: "",
+  },
+});
 
 const iconName = computed(() => {
   return `#icon-${props.name}`;
