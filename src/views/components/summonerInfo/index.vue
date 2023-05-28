@@ -1,9 +1,9 @@
 <script setup>
 import { computed, nextTick, ref, watch } from "vue";
-import { deepCopy } from "@/utils/base";
+import { deepCopy } from "@/utils/base.js";
 import { queryCurrentSummonerStore } from "@/stors/store/summoner.js";
 import { getRankStatus } from "@/API/home.js";
-import { switchTier } from "@/views/home/summonerInfo/source.js";
+import { switchTier } from "@/views/components/summonerInfo/source.js";
 import { RankStatus } from "@/modules/RankStatus.js";
 
 const props = defineProps({

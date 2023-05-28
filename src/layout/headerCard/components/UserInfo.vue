@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from "vue";
+import { inject, onMounted, ref } from "vue";
 import { getCurrentSummoner } from "@/API/layout.js";
 import { $Message, updateCommandLine } from "@/utils/base";
 import { useCurrentSummonerStore } from "@/stors/store/summoner.js";
@@ -27,6 +27,8 @@ const setPercentage = () => {
       100
   );
 };
+const reLoad = inject("reLoad");
+
 // 更新当前召唤师，失败就重新获取客户端参数再试
 const update = async () => {
   await updateCommandLine();
@@ -36,6 +38,7 @@ const update = async () => {
       profileIconId.value = data.profileIconId || 29;
       summonerName.value = data.displayName || "点击连接客户端";
       setPercentage();
+      reLoad();
       configStore.setIsReady(true);
       $Message(
         "更新当前召唤师",

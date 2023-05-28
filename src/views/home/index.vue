@@ -1,6 +1,6 @@
 <script setup>
-import SummonerInfo from "@/views/home/summonerInfo/index.vue";
-import recordList from "@/views/home/recordList/index.vue";
+import SummonerInfo from "@/views/components/summonerInfo/index.vue";
+import recordList from "@/views/components/recordList/index.vue";
 import { computed, nextTick, provide, ref, watch } from "vue";
 import {
   queryCurrentSummonerStore,
@@ -23,7 +23,7 @@ init();
       <SummonerInfo :summoner="summoner" />
     </el-col>
     <el-col :span="18">
-      <!--      <recordList />-->
+      <recordList :summoner="summoner" />
     </el-col>
   </el-row>
 </template>
