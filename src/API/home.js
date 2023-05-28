@@ -5,3 +5,10 @@ export const getRankStatus = (puuid) => {
     method: "get",
   });
 };
+export const getSummonerMatchHistory = (puuid, query) => {
+  return request({
+    url: `/lol-match-history/v1/products/lol/${puuid}/matches`,
+    method: "get",
+    query,
+  });
+};

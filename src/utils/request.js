@@ -7,11 +7,12 @@ import { fetch } from "@tauri-apps/api/http";
 
 async function request(option) {
   return new Promise(async (resolve, reject) => {
-    const { url, method, query } = option;
+    const { url, method, query = {} } = option;
     let oldDate = getNowDate();
     console.log(
-      `%c[${method}] ${url} ${oldDate}`,
-      `color: #4CAF50; font-weight: bold`
+      `%c[${method}] ${url} ${oldDate} `,
+      `color: #4CAF50; font-weight: bold`,
+      deepCopy(query) || ""
     );
     let res;
     const configStore = useConfigStore(pinia);

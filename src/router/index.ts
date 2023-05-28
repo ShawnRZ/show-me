@@ -15,7 +15,6 @@ const routes: Array<RouteRecordRaw> = [
       title: "首页",
       icon: "home",
     },
-    // children: [],
   },
   {
     path: "/search",
@@ -26,6 +25,20 @@ const routes: Array<RouteRecordRaw> = [
       title: "搜索",
       icon: "search",
     },
+    children: [
+      {
+        path: "/search?/:puuid",
+        name: "searchByPuuid",
+        component: () =>
+          import(
+            /* webpackChunkName: "about" */ "@/views/search/components/index.vue"
+          ),
+        // meta: {
+        //   title: "搜索",
+        //   icon: "search",
+        // },
+      },
+    ],
   },
 ];
 
