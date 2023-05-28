@@ -4,8 +4,9 @@ import { computed, inject } from "vue";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
+// 解决路由传参跳转后页面icon不active
 const path = computed(() => {
-  return router.currentRoute.value.fullPath;
+  return router.currentRoute.value.fullPath.split("?")[0];
 });
 // 解决重定向报错问题
 const routers = computed(() => {
@@ -16,7 +17,6 @@ const routers = computed(() => {
 const reLoad = inject("reLoad");
 const menuClick = (menu) => {
   if (menu.index === path.value) {
-    console.log(reLoad());
     reLoad();
   }
 };

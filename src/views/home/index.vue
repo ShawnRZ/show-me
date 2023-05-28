@@ -7,6 +7,7 @@ import {
   useCurrentSummonerStore,
 } from "@/stors/store/summoner.js";
 import { deepCopy } from "@/utils/base.js";
+import { onBeforeRouteUpdate, useRoute } from "vue-router";
 let summoner = ref({});
 const currentSummoner = useCurrentSummonerStore();
 const init = () => {
@@ -21,9 +22,9 @@ init();
     <el-col :span="6">
       <SummonerInfo :summoner="summoner" />
     </el-col>
-    <!--    <el-col :span="18">-->
-    <!--      <recordList />-->
-    <!--    </el-col>-->
+    <el-col :span="18">
+      <!--      <recordList />-->
+    </el-col>
   </el-row>
 </template>
 

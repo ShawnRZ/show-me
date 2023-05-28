@@ -17,28 +17,29 @@ let loading = ref(false);
 let soloCard = ref({});
 let flexCard = ref({});
 const init = () => {
+  loading.value = false;
   // 获取rank详情
   getRankStatus(summoner.value.puuid).then((data) => {
     const { RANKED_SOLO_5x5, RANKED_FLEX_SR } = data.queueMap;
     soloCard.value = new RankStatus(RANKED_SOLO_5x5);
     flexCard.value = new RankStatus(RANKED_FLEX_SR);
+    loading.value = true;
   });
-  loading.value = true;
 };
 summoner.value = deepCopy(props.summoner);
 
 init();
 
-const queryCurrentSummoner = queryCurrentSummonerStore();
-const querySummoner = computed(() => {
-  return queryCurrentSummoner.getSummoner;
-});
-watch(querySummoner, () => {
-  nextTick(() => {
-    summoner.value = deepCopy(querySummoner.value);
-    init();
-  });
-});
+// const queryCurrentSummoner = queryCurrentSummonerStore();
+// const querySummoner = computed(() => {
+//   return queryCurrentSummoner.getSummoner;
+// });
+// watch(querySummoner, () => {
+//   nextTick(() => {
+//     summoner.value = deepCopy(querySummoner.value);
+//     init();
+//   });
+// });
 </script>
 
 <template>
@@ -72,9 +73,9 @@ watch(querySummoner, () => {
       </el-skeleton>
     </div>
 
-    <el-card class="solo-rank">
+    <el-card class="solo-rank" v-for="(item, index) in [soloCard, flexCard]">
       <template #header>
-        <span>单双排</span>
+        <span>{{ ["单双排", "灵活排位"][index] }}</span>
       </template>
 
       <el-skeleton :loading="!loading" :animated="true">
@@ -100,66 +101,22 @@ watch(querySummoner, () => {
             </div>
             <div class="rank-level">
               <div class="level">
-                <span class="tier">{{ soloCard.rankTier }}</span>
-                <span class="division">{{ soloCard.rankDivision }}</span>
+                <span class="tier">{{ item.rankTier }}</span>
+                <span class="division">{{ item.rankDivision }}</span>
               </div>
               <div class="lp">
-                <span>{{ soloCard.Lp }}LP</span>
+                <span>{{ item.Lp }}LP</span>
               </div>
             </div>
             <div class="win-lose">
-              {{ soloCard.Win }}胜{{ soloCard.Lose }}负
+              {{ item.Win }}胜{{ item.Lose }}负
               <br />
-              胜率{{ soloCard.winRate }}%
+              胜率{{ item.winRate }}%
             </div>
           </div>
         </template>
       </el-skeleton>
     </el-card>
-    <!--    <el-card class="flex-rank">-->
-    <!--      <template #header>-->
-    <!--        <span>灵活排位</span>-->
-    <!--      </template>-->
-
-    <!--      <el-skeleton :loading="!ready" :animated="true">-->
-    <!--        <template #template style="display: flex">-->
-    <!--          <div style="display: flex">-->
-    <!--            <el-skeleton-item variant="image" class="te-img" />-->
-    <!--            <div class="te-text">-->
-    <!--              <el-skeleton-item variant="h3" style="width: 100%" />-->
-    <!--              <el-skeleton-item-->
-    <!--                variant="h3"-->
-    <!--                style="width: 100%; margin-top: 10px"-->
-    <!--              />-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </template>-->
-    <!--        <template #default>-->
-    <!--          <div class="card-body">-->
-    <!--            <div class="rank-icon">-->
-    <!--              <img-->
-    <!--                :src="`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${flexRankIcon}.png`"-->
-    <!--                alt=""-->
-    <!--              />-->
-    <!--            </div>-->
-    <!--            <div class="rank-level">-->
-    <!--              <div class="level">-->
-    <!--                <span class="tier">{{ flexRankTier }}</span>-->
-    <!--                <span class="division">{{ flexRankDivision }}</span>-->
-    <!--              </div>-->
-    <!--              <div class="lp">-->
-    <!--                <span>{{ flexLp }}LP</span>-->
-    <!--              </div>-->
-    <!--            </div>-->
-    <!--            <div class="win-lose">-->
-    <!--              {{ flexWin }}胜{{ flexLose }}负-->
-    <!--              <br />-->
-    <!--              胜率{{ flexWinRate }}%-->
-    <!--            </div>-->
-    <!--          </div>-->
-    <!--        </template>-->
-    <!--            </el-skeleton>-->
-    <!--    </el-card>-->
   </div>
 </template>
 

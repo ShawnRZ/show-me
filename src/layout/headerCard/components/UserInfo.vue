@@ -5,7 +5,8 @@ import { $Message, updateCommandLine } from "@/utils/base";
 import { useCurrentSummonerStore } from "@/stors/store/summoner.js";
 import { useConfigStore } from "@/stors/store/config.js";
 import { ElNotification } from "element-plus";
-
+import { useRouter } from "vue-router";
+const router = useRouter();
 const currentSummoner = useCurrentSummonerStore();
 const configStore = useConfigStore();
 // 当前召唤师
