@@ -21,7 +21,10 @@ let gameCount = ref(0);
 let begIndex = ref(0);
 let endIndex = ref(10);
 const init = async () => {
-  Promise.all([getSpellUrl(), getPerkUrl()], getItemUrl())
+  // getItemUrl().then((res) => {
+  //   console.log(res);
+  // });
+  Promise.all([getSpellUrl(), getPerkUrl(), getItemUrl()])
     .then((res) => {
       spellMap.value = res[0];
       perkMap.value = res[1];
@@ -67,32 +70,29 @@ init();
 
 <template>
   <div class="game-con">
-    <el-row justify="space-evenly">
-      <el-col :span="6">
-        <template v-for="(item, index) in games" :key="index">
-          <game-item
-            :spellMap="spellMap"
-            :perkMap="perkMap"
-            :itemMap="itemMap"
-            :game="item"
-          ></game-item>
-        </template>
-        <!--        <game-list :spellMap="spellMap" :perkMap="perkMap" :itemMap="itemMap" />-->
-        <!--        <pagination-->
-        <!--          :index="currentIndex"-->
-        <!--          @next="next"-->
-        <!--          @prev="prev"-->
-        <!--        ></pagination>-->
+    <el-row justify="space-evenly" style="height: 100%">
+      <el-col :span="10" class="game-record">
+        <el-scrollbar height="800px">
+          <template v-for="(item, index) in games" :key="index">
+            <game-item
+              :spellMap="spellMap"
+              :perkMap="perkMap"
+              :itemMap="itemMap"
+              :game="item"
+              v-if="ready"
+            ></game-item>
+          </template>
+        </el-scrollbar>
         <el-pagination
           background
           layout="prev, pager, next"
-          :pager-count="4"
+          :pagerCount="9"
           :page-size="10"
           v-model:current-page="currentIndex"
           :total="gameCount"
         />
       </el-col>
-      <el-col :span="14">
+      <el-col :span="12">
         <game-detail />
       </el-col>
     </el-row>
@@ -103,5 +103,12 @@ init();
 .game-con {
   width: 100%;
   height: 100%;
+  .game-record {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
 }
 </style>
