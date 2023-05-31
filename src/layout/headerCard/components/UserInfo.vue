@@ -2,14 +2,12 @@
 import { inject, onMounted, ref } from "vue";
 import { getCurrentSummoner } from "@/API/layout.js";
 import { $Message, updateCommandLine } from "@/utils/base";
-import { useCurrentSummonerStore } from "@/stors/store/summoner.js";
 import { useConfigStore } from "@/stors/store/config.js";
 import { ElNotification } from "element-plus";
 import { useRouter } from "vue-router";
 const router = useRouter();
-const currentSummoner = useCurrentSummonerStore();
+
 const configStore = useConfigStore();
-// 当前召唤师
 
 // 召唤师头像id
 let profileIconId = ref(29);
@@ -17,34 +15,34 @@ let profileIconId = ref(29);
 let summonerName = ref("点击连接客户端");
 // 召唤师经验进度条
 let percentage = ref(100);
-const setPercentage = () => {
-  if (!currentSummoner.getSummoner) {
+const setPercentage = (data) => {
+  if (!data) {
     percentage.value = 100;
   }
   percentage.value = Math.floor(
-    (currentSummoner.getSummoner.xpSinceLastLevel /
-      currentSummoner.getSummoner.xpUntilNextLevel) *
-      100
+    (data.xpSinceLastLevel / data.xpUntilNextLevel) * 100
   );
 };
 const reLoad = inject("reLoad");
 
 // 更新当前召唤师，失败就重新获取客户端参数再试
 const update = async () => {
-  await updateCommandLine();
+  await updateCommandLine().catch((e) => {
+    profileIconId.value = 29;
+    summonerName.value = "点击连接客户端";
+    percentage.value = 100;
+  });
   getCurrentSummoner()
     .then((data) => {
-      currentSummoner.setSummoner(data);
       profileIconId.value = data.profileIconId || 29;
       summonerName.value = data.displayName || "点击连接客户端";
-      setPercentage();
-      reLoad();
+      setPercentage(data);
+      router.push({
+        name: "currentPuuid",
+        params: { puuid: data.puuid },
+      });
       configStore.setIsReady(true);
-      $Message(
-        "更新当前召唤师",
-        currentSummoner.getSummoner?.displayName,
-        "success"
-      );
+      $Message("更新当前召唤师", data.displayName, "success");
     })
     .catch((e) => {
       configStore.setIsReady(false);

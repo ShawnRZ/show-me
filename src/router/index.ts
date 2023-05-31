@@ -15,6 +15,14 @@ const routes: Array<RouteRecordRaw> = [
       title: "首页",
       icon: "home",
     },
+    children: [
+      {
+        path: "/home?/:puuid",
+        name: "currentPuuid",
+        component: () =>
+          import(/* webpackChunkName: "about" */ "@/views/home/home/index.vue"),
+      },
+    ],
   },
   {
     path: "/search",
@@ -33,11 +41,15 @@ const routes: Array<RouteRecordRaw> = [
           import(
             /* webpackChunkName: "about" */ "@/views/search/components/index.vue"
           ),
-        // meta: {
-        //   title: "搜索",
-        //   icon: "search",
-        // },
       },
+      // {
+      //   path: "/search?/:puuid",
+      //   name: "queryPuuid",
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "about" */ "@/views/search/queryPuuid/index.vue"
+      //     ),
+      // },
     ],
   },
 ];

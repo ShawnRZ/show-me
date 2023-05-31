@@ -1,14 +1,11 @@
 <script setup>
-import { computed, nextTick, ref, watch } from "vue";
-import { deepCopy } from "@/utils/base.js";
-import { queryCurrentSummonerStore } from "@/stors/store/summoner.js";
-import { getRankStatus } from "@/API/home.js";
-import { switchTier } from "@/views/components/summonerInfo/source.js";
+import { ref } from "vue";
+import { getRankStatus, getSummoner } from "@/API/home.js";
 import { RankStatus } from "@/modules/RankStatus.js";
 
 const props = defineProps({
-  summoner: {
-    type: Object,
+  puuid: {
+    type: String,
     default: "",
   },
 });
@@ -18,28 +15,19 @@ let soloCard = ref({});
 let flexCard = ref({});
 const init = () => {
   loading.value = false;
+  // 根据puuid获取召唤师详情
+  getSummoner(props.puuid).then((data) => {
+    summoner.value = data;
+  });
   // 获取rank详情
-  getRankStatus(summoner.value.puuid).then((data) => {
+  getRankStatus(props.puuid).then((data) => {
     const { RANKED_SOLO_5x5, RANKED_FLEX_SR } = data.queueMap;
     soloCard.value = new RankStatus(RANKED_SOLO_5x5);
     flexCard.value = new RankStatus(RANKED_FLEX_SR);
     loading.value = true;
   });
 };
-summoner.value = deepCopy(props.summoner);
-
 init();
-
-// const queryCurrentSummoner = queryCurrentSummonerStore();
-// const querySummoner = computed(() => {
-//   return queryCurrentSummoner.getSummoner;
-// });
-// watch(querySummoner, () => {
-//   nextTick(() => {
-//     summoner.value = deepCopy(querySummoner.value);
-//     init();
-//   });
-// });
 </script>
 
 <template>

@@ -7,8 +7,8 @@ import { ref, watch } from "vue";
 import { $Message } from "@/utils/base.js";
 import { getSummonerMatchHistory } from "@/API/home.js";
 const props = defineProps({
-  summoner: {
-    type: Object,
+  puuid: {
+    type: String,
     default: "",
   },
 });
@@ -42,7 +42,7 @@ const getHistory = (beg, end) => {
     begIndex: String(beg),
     endIndex: String(end),
   };
-  getSummonerMatchHistory(props.summoner.puuid, index)
+  getSummonerMatchHistory(props.puuid, index)
     .then((data) => {
       console.log("加载成功");
       gameCount.value = data.games.gameCount;
