@@ -1,3 +1,5 @@
+pub mod cer;
+
 use log::info;
 
 use core::ffi::c_void;
