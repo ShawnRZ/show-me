@@ -27,8 +27,8 @@ const routes: Array<RouteRecordRaw> = [
     },
     children: [
       {
-        path: "/search?/:puuid",
-        name: "searchByPuuid",
+        path: "/search?/:queryName",
+        name: "queryByName",
         component: () =>
           import(
             /* webpackChunkName: "about" */ "@/views/search/components/index.vue"

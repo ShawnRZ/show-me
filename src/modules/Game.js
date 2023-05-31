@@ -72,13 +72,6 @@ export class Game {
       this.perk5,
     ];
     //   装备1-7name和图片
-    this.item0 = getItemUrl(data.participants[0].stats.item0, itemMap);
-    this.item1 = getItemUrl(data.participants[0].stats.item1, itemMap);
-    this.item2 = getItemUrl(data.participants[0].stats.item2, itemMap);
-    this.item3 = getItemUrl(data.participants[0].stats.item3, itemMap);
-    this.item4 = getItemUrl(data.participants[0].stats.item4, itemMap);
-    this.item5 = getItemUrl(data.participants[0].stats.item5, itemMap);
-    this.item6 = getItemUrl(data.participants[0].stats.item6, itemMap);
     this.item0 = new item(stats.item0, itemMap);
     this.item1 = new item(stats.item1, itemMap);
     this.item2 = new item(stats.item2, itemMap);
@@ -95,6 +88,15 @@ export class Game {
       this.item5,
       this.item6,
     ];
+    //   KDA
+    this.kills = stats.kills;
+    this.assists = stats.assists;
+    this.deaths = stats.deaths;
+    //   经济
+    this.goldEarned = stats.goldEarned;
+    this.totalMinionsKilled = stats.totalMinionsKilled;
+    //   总伤害
+    this.totalDamageDealtToChampions = stats.totalDamageDealtToChampions;
   }
 }
 class perk {

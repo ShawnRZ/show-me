@@ -27,7 +27,7 @@ const props = defineProps({
 const game = computed(() => {
   return new Game(props.game, props.spellMap, props.perkMap, props.itemMap);
 });
-console.log(game.value);
+
 // init();
 </script>
 
@@ -61,42 +61,48 @@ console.log(game.value);
     </div>
     <!--	  符文和装备-->
     <div class="perks-items">
-      <div class="perk" v-for="(item, index) in game.perks">
-        <el-tooltip :content="item.perkName" placement="top">
-          <img :key="index" :src="item.perkIcon" alt="" />
-        </el-tooltip>
+      <div>
+        <div class="perk" v-for="(item, index) in game.perks">
+          <el-tooltip :content="item.perkName" placement="top">
+            <img :key="index" :src="item.perkIcon" alt="" />
+          </el-tooltip>
+        </div>
       </div>
-      <div class="item" v-for="(item, index) in game.items">
-        <el-tooltip
-          :content="item.itemName"
-          v-if="item.itemName"
-          placement="bottom"
-        >
-          <img :src="item.itemIcon" :key="index" alt="" class="item" />
-        </el-tooltip>
-        <img :src="item.itemIcon" :key="index" v-else alt="" class="item" />
+      <div>
+        <div class="item" v-for="(item, index) in game.items">
+          <el-tooltip
+            :content="item.itemName"
+            v-if="item.itemName"
+            placement="bottom"
+          >
+            <img :src="item.itemIcon" :key="index" alt="" class="item" />
+          </el-tooltip>
+          <img :src="item.itemIcon" :key="index" v-else alt="" class="item" />
+        </div>
       </div>
     </div>
     <div class="stats">
       <p style="font-weight: 700; font-size: 14px">
-        <span>&nbsp;10&nbsp;</span>
+        <span>&nbsp;{{ game.kills }}&nbsp;</span>
         /
-        <span>&nbsp;17&nbsp;</span>
+        <span style="color: red">&nbsp;{{ game.assists }}&nbsp;</span>
         /
-        <span>&nbsp;16&nbsp;</span>
+        <span>&nbsp;{{ game.deaths }}&nbsp;</span>
       </p>
-      <p>
-        <template v-for="item in 2">
-          <span>
-            <img data-v-d48b5504="" src="/src/assets/icon_gold.png" alt="" />
-          </span>
-          <span>12345</span>
-        </template>
-      </p>
-      <p>
-        <img data-v-d48b5504="" src="/src/assets/kills.png" alt="" />
-        <span>12</span>
-      </p>
+      <div class="total">
+        <div class="gold">
+          <img src="/src/assets/icon_gold.png" alt="" />
+          {{ game.goldEarned }}
+        </div>
+        <div class="gold">
+          <img src="/src/assets/icon_minions.png" alt="" />
+          {{ game.totalMinionsKilled }}
+        </div>
+      </div>
+      <div class="gold">
+        <img src="/src/assets/kills.png" alt="" />
+        {{ game.totalDamageDealtToChampions }}
+      </div>
     </div>
     <!--    <el-button>查看</el-button>-->
   </div>
@@ -184,6 +190,14 @@ console.log(game.value);
     width: 120px;
     height: 60px;
     margin-left: 5px;
+    .total {
+      display: flex;
+    }
+    .gold {
+      display: flex;
+      align-items: center;
+      width: 60px;
+    }
     img {
       width: 15px;
       height: 15px;

@@ -1,5 +1,5 @@
 <script setup>
-import { computed, inject } from "vue";
+import { computed, inject, watch } from "vue";
 
 import { useRouter } from "vue-router";
 
@@ -20,6 +20,13 @@ const menuClick = (menu) => {
     reLoad();
   }
 };
+watch(
+  () => router.currentRoute.value.fullPath,
+  (oldPath, newPath) => {
+    console.log("路由变化", oldPath, newPath);
+    reLoad();
+  }
+);
 </script>
 
 <template>

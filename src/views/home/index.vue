@@ -11,6 +11,7 @@ import { onBeforeRouteUpdate, useRoute } from "vue-router";
 let summoner = ref({});
 const currentSummoner = useCurrentSummonerStore();
 const init = () => {
+  console.log("home加载");
   summoner.value = deepCopy(currentSummoner.getSummoner);
 };
 
