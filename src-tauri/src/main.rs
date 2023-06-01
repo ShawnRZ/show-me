@@ -16,6 +16,17 @@ fn get_command_line() -> (String, String) {
     show_me::get_command_line()
 }
 
+#[tauri::command]
+fn test_and_set_cer() -> Result<(), String> {
+    match show_me::cer::test_and_set() {
+        Ok(_) => Ok(()),
+        Err(error) => {
+            info!("asd");
+            Err(error.to_string())
+        }
+    }
+}
+
 fn main() {
     env_logger::Builder::from_env(Env::default().default_filter_or("trace")).init();
 
@@ -31,7 +42,11 @@ fn main() {
             set_shadow(&window, true).expect("Unsupported platform!");
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![greet, get_command_line])
+        .invoke_handler(tauri::generate_handler![
+            greet,
+            get_command_line,
+            test_and_set_cer
+        ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }
