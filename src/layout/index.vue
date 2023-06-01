@@ -7,13 +7,9 @@ let isRouterLive = ref(true);
 const router = useRouter();
 
 const reLoad = () => {
-  console.log(router.currentRoute.value.fullPath);
-  console.log("重新渲染");
   isRouterLive.value = false;
   nextTick(() => {
     isRouterLive.value = true;
-    console.log(router.currentRoute.value.fullPath);
-    console.log("渲染结束");
   });
 };
 provide("reLoad", reLoad);

@@ -8,8 +8,6 @@ import { getCurrentSummoner } from "@/API/layout.js";
 const route = useRoute();
 let puuid = ref("");
 const init = () => {
-  console.log("home初始化");
-  console.log(route.params.puuid);
   if (route.params.puuid) {
     puuid.value = route.params.puuid;
   } else {

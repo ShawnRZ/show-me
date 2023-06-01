@@ -27,11 +27,22 @@ async function request(option) {
         query,
       });
     } catch (err) {
-      console.log("网络错误！", err);
+      console.log(
+        `%c[${method}] ${url} `,
+        `color: red; font-weight: bold`,
+        "网络错误！",
+        err
+      );
       reject(err);
     }
     if (!res.ok) {
-      console.log("请求参数错误", res);
+      console.log(
+        `%c[${method}] ${url} `,
+        `color: red; font-weight: bold`,
+        "请求参数错误",
+        deepCopy(query) || "",
+        res
+      );
       reject(res.status);
     }
     let nowDate = getNowDate();
@@ -43,5 +54,4 @@ async function request(option) {
     resolve(res.data);
   });
 }
-
 export default request;

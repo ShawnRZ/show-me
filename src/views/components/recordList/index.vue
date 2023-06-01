@@ -44,7 +44,7 @@ const getHistory = (beg, end) => {
   };
   getSummonerMatchHistory(props.puuid, index)
     .then((data) => {
-      console.log("加载成功");
+      console.log("战绩列表加载成功");
       gameCount.value = data.games.gameCount;
       games.value = data.games.games.reverse();
       begIndex.value = 0;
@@ -61,6 +61,7 @@ const getHistory = (beg, end) => {
 
 let currentIndex = ref(1);
 watch(currentIndex, (value) => {
+  console.log(`第${currentIndex.value}次请求战绩列表`);
   begIndex.value = (value - 1) * 10;
   endIndex.value = value * 10;
   getHistory(begIndex.value, endIndex.value);

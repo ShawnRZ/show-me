@@ -23,7 +23,6 @@ const menuClick = (menu) => {
 watch(
   () => router.currentRoute.value.fullPath,
   (oldPath, newPath) => {
-    console.log("路由变化", oldPath, newPath);
     reLoad();
   }
 );
