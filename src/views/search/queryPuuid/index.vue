@@ -2,17 +2,18 @@
 import SummonerInfo from "@/views/components/summonerInfo/index.vue";
 import recordList from "@/views/components/recordList/index.vue";
 import { computed, nextTick, provide, ref, watch } from "vue";
-import { useRoute } from "vue-router";
 
-const route = useRoute();
+const props = defineProps({
+  puuid: {
+    type: String,
+    default: "",
+  },
+});
+
 let puuid = ref("");
 const init = () => {
-  console.log("home加载", route.params.puuid);
-  if (route.params.puuid) {
-    puuid.value = route.params.puuid;
-  }
+  puuid.value = props.puuid;
 };
-
 init();
 </script>
 

@@ -38,18 +38,8 @@ const routes: Array<RouteRecordRaw> = [
         path: "/search?/:queryName",
         name: "queryByName",
         component: () =>
-          import(
-            /* webpackChunkName: "about" */ "@/views/search/components/index.vue"
-          ),
+          import(/* webpackChunkName: "about" */ "@/views/search/index.vue"),
       },
-      // {
-      //   path: "/search?/:puuid",
-      //   name: "queryPuuid",
-      //   component: () =>
-      //     import(
-      //       /* webpackChunkName: "about" */ "@/views/search/queryPuuid/index.vue"
-      //     ),
-      // },
     ],
   },
 ];

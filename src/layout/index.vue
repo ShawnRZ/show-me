@@ -2,11 +2,18 @@
 import headerCard from "@/layout/headerCard/index.vue";
 import asideCard from "@/layout/asideCard/index.vue";
 import { nextTick, provide, ref } from "vue";
+import { useRouter } from "vue-router";
 let isRouterLive = ref(true);
+const router = useRouter();
+
 const reLoad = () => {
+  console.log(router.currentRoute.value.fullPath);
+  console.log("重新渲染");
   isRouterLive.value = false;
   nextTick(() => {
     isRouterLive.value = true;
+    console.log(router.currentRoute.value.fullPath);
+    console.log("渲染结束");
   });
 };
 provide("reLoad", reLoad);
@@ -25,9 +32,9 @@ provide("reLoad", reLoad);
         <el-main>
           <template v-if="isRouterLive">
             <router-view v-slot="{ Component }">
-              <keep-alive>
-                <component :is="Component" />
-              </keep-alive>
+              <!--              <keep-alive>-->
+              <component :is="Component" />
+              <!--              </keep-alive>-->
             </router-view>
           </template>
         </el-main>

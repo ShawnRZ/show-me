@@ -1,19 +1,21 @@
 <script setup>
 import { onBeforeRouteLeave, useRoute, useRouter } from "vue-router";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { getQuerySummoner } from "@/API/layout.js";
 import { $Message } from "@/utils/base.js";
+import queryPuuid from "@/views/search/queryPuuid/index.vue";
 let queryName = ref("");
 const route = useRoute();
 const router = useRouter();
-
+let puuid = ref("");
 const init = () => {
-  console.log("搜索初始化", route.params.queryName);
+  puuid.value = route.params?.puuid || "";
   if (route.params.queryName) {
     queryName.value = route.params.queryName;
     getQuerySummoner({ name: queryName.value })
       .then((data) => {
         $Message("查询召唤师", `${queryName.value}`, "success");
+        puuid.value = data.puuid;
         // router.push({
         //   name: "queryPuuid",
         //   params: { puuid: data.puuid },
@@ -33,11 +35,10 @@ init();
 </script>
 
 <template>
-  <template v-if="queryName">
-    {{ queryName }}
-
-    <router-view />
+  <template v-if="puuid">
+    <queryPuuid :puuid="puuid"></queryPuuid>
   </template>
+
   <template v-else> 搜索框 </template>
 </template>
 
