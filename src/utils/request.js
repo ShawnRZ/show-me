@@ -43,7 +43,7 @@ async function request(option) {
         deepCopy(query) || "",
         res
       );
-      reject(res.status);
+      reject(res);
     }
     let nowDate = getNowDate();
     console.log(

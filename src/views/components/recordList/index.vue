@@ -55,7 +55,11 @@ const getHistory = (beg, end) => {
       // 递归调用，请求失败 endIndex+10
       // beg = beg + 10;
       end = end + 10;
-      getHistory(beg, end);
+      if (e.data.message.includes("body was empty")) {
+        $Message("", "召唤师战绩为空！", "warning");
+      } else {
+        getHistory(beg, end);
+      }
     });
 };
 

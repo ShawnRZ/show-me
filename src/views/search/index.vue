@@ -23,7 +23,7 @@ const init = () => {
       })
       .catch((e) => {
         // querySummoner.setSummoner({});
-        if (e === 404) {
+        if (e.status === 404) {
           $Message("失败!", `召唤师不存在:${queryName.value}！`, "warning");
         } else {
           $Message("失败!", `${e}！`, "warning");
