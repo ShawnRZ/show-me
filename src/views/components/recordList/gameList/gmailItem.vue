@@ -20,10 +20,6 @@ const props = defineProps({
     default: {},
   },
 });
-// let game = ref({});
-// const init = () => {
-//   game.value = new Game(props.game);
-// };
 const game = computed(() => {
   return new Game(props.game, props.spellMap, props.perkMap, props.itemMap);
 });
@@ -32,13 +28,12 @@ const game = computed(() => {
 </script>
 
 <template>
-  <!--  {{ switchGameType[props.game.queueId] }}-->
-  <!--  {{ timeStamp[props.game.gameCreation] }}-->
-  <!--  {{ props.game.participants[0].stats.win ? "胜利" : "失败" }}-->
   <div :class="['game-card', game.win ? 'win-border' : 'lose-border']">
     <!--	  游戏信息-->
     <div class="game-info">
-      <p class="game-type win-text">{{ game.gameType }}</p>
+      <p :class="['game-type', game.win ? 'win-text' : 'lose-text']">
+        {{ game.gameType }}
+      </p>
       <p class="time-stamp">{{ game.timeStamp }}</p>
       <p class="result">
         {{ game.win ? "胜利" : "失败" }}
@@ -117,6 +112,7 @@ const game = computed(() => {
   font-size: 10px;
   padding: 10px;
   margin-bottom: 5px;
+  cursor: pointer;
   img {
     width: 25px;
     height: 25px;
@@ -125,6 +121,7 @@ const game = computed(() => {
     margin: 0;
   }
   .game-info {
+    width: 70px;
     color: #788491;
     display: flex;
     flex-direction: column;
@@ -205,17 +202,21 @@ const game = computed(() => {
   }
 }
 .win-border {
+  border-radius: 5px;
   border-left: 6px solid #5282e6;
   border-top: 2px solid #5282e6;
-  border-right: 2px solid #5282e6;
+  /* border-right: 2px solid #5282e6; */
   border-bottom: 2px solid #5282e6;
-  border-radius: 5px;
+  border-image: linear-gradient(-90deg, #1e1e1eff 0%, #5282e6 100%) 2 2 2 2;
 }
 .lose-border {
+  border-radius: 5px;
   border-left: 6px solid #e63f56;
   border-top: 2px solid #e63f56;
-  border-right: 2px solid #e63f56;
+  /* border-right: 2px solid #5282e6; */
   border-bottom: 2px solid #e63f56;
-  border-radius: 5px;
+  border-image: linear-gradient(-90deg, #1e1e1eff 0%, #e63f56 100%) 2 2 2 2;
+  //background-origin: border-box;
+  //background-clip: content-box, border-box;
 }
 </style>
