@@ -1,27 +1,26 @@
 <script setup>
 import { computed, ref } from "vue";
 import { Game } from "@/modules/Game.js";
-
+import { deepCopy } from "@/utils/base.js";
+// import {
+//   useItemStore,
+//   usePerkStore,
+//   useSpellStore,
+// } from "@/stors/store/static.js";
+// const spellStore = useSpellStore();
+// const perkStore = usePerkStore();
+// const itemStore = useItemStore();
 const props = defineProps({
-  spellMap: {
-    type: Object,
-    default: {},
-  },
-  perkMap: {
-    type: Object,
-    default: {},
-  },
-  itemMap: {
-    type: Object,
-    default: {},
-  },
   game: {
     type: Object,
     default: {},
   },
 });
 const game = computed(() => {
-  return new Game(props.game, props.spellMap, props.perkMap, props.itemMap);
+  // let spell = spellStore.getSpell;
+  // let perk = perkStore.getPerk;
+  // let item = itemStore.getItem;
+  return new Game(props.game);
 });
 
 // init();
@@ -113,6 +112,7 @@ const game = computed(() => {
   padding: 10px;
   margin-bottom: 5px;
   cursor: pointer;
+  background-color: #1d1e1f;
   img {
     width: 25px;
     height: 25px;
@@ -202,7 +202,7 @@ const game = computed(() => {
   }
 }
 .win-border {
-  border-radius: 5px;
+  //border-radius: 5px;
   border-left: 6px solid #5282e6;
   border-top: 2px solid #5282e6;
   /* border-right: 2px solid #5282e6; */
@@ -210,7 +210,7 @@ const game = computed(() => {
   border-image: linear-gradient(-90deg, #1e1e1eff 0%, #5282e6 100%) 2 2 2 2;
 }
 .lose-border {
-  border-radius: 5px;
+  //border-radius: 5px;
   border-left: 6px solid #e63f56;
   border-top: 2px solid #e63f56;
   /* border-right: 2px solid #5282e6; */
@@ -218,5 +218,8 @@ const game = computed(() => {
   border-image: linear-gradient(-90deg, #1e1e1eff 0%, #e63f56 100%) 2 2 2 2;
   //background-origin: border-box;
   //background-clip: content-box, border-box;
+}
+.select {
+  box-shadow: -10px 0px 20px -10px rgba(0, 0, 0, 0.75) inset;
 }
 </style>

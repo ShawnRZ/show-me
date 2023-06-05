@@ -27,9 +27,21 @@
 //     // this.teams=Team[];
 //   }
 // }
+import {
+  useItemStore,
+  usePerkStore,
+  useSpellStore,
+} from "@/stors/store/static.js";
+
+const spell = useSpellStore();
+const perk = usePerkStore();
+const item = useItemStore();
 
 export class Game {
-  constructor(data, spellMap, perkMap, itemMap) {
+  constructor(data) {
+    let spellMap = spell.getSpell;
+    let perkMap = perk.getPerk;
+    let itemMap = item.getItem;
     this.gameId = data.gameId;
     // 是否胜利
     this.win = data.participants[0].stats.win;
@@ -55,14 +67,14 @@ export class Game {
       data.participants[0].spell2Id,
       spellMap
     )}.png`;
-    //   符文0-5name和图片
+    // 符文0-5name和图片
     let stats = data.participants[0].stats;
-    this.perk0 = new perk(stats.perk0, perkMap);
-    this.perk1 = new perk(stats.perk1, perkMap);
-    this.perk2 = new perk(stats.perk2, perkMap);
-    this.perk3 = new perk(stats.perk3, perkMap);
-    this.perk4 = new perk(stats.perk4, perkMap);
-    this.perk5 = new perk(stats.perk5, perkMap);
+    this.perk0 = new Perk(stats.perk0, perkMap);
+    this.perk1 = new Perk(stats.perk1, perkMap);
+    this.perk2 = new Perk(stats.perk2, perkMap);
+    this.perk3 = new Perk(stats.perk3, perkMap);
+    this.perk4 = new Perk(stats.perk4, perkMap);
+    this.perk5 = new Perk(stats.perk5, perkMap);
     this.perks = [
       this.perk0,
       this.perk1,
@@ -72,13 +84,13 @@ export class Game {
       this.perk5,
     ];
     //   装备1-7name和图片
-    this.item0 = new item(stats.item0, itemMap);
-    this.item1 = new item(stats.item1, itemMap);
-    this.item2 = new item(stats.item2, itemMap);
-    this.item3 = new item(stats.item3, itemMap);
-    this.item4 = new item(stats.item4, itemMap);
-    this.item5 = new item(stats.item5, itemMap);
-    this.item6 = new item(stats.item6, itemMap);
+    this.item0 = new Item(stats.item0, itemMap);
+    this.item1 = new Item(stats.item1, itemMap);
+    this.item2 = new Item(stats.item2, itemMap);
+    this.item3 = new Item(stats.item3, itemMap);
+    this.item4 = new Item(stats.item4, itemMap);
+    this.item5 = new Item(stats.item5, itemMap);
+    this.item6 = new Item(stats.item6, itemMap);
     this.items = [
       this.item0,
       this.item1,
@@ -99,14 +111,11 @@ export class Game {
     this.totalDamageDealtToChampions = stats.totalDamageDealtToChampions;
   }
 }
-class perk {
+class Perk {
   constructor(data, perkMap) {
     let o = null;
-    for (let map of perkMap) {
-      if (map.has(data)) {
-        o = map.get(data);
-        break;
-      }
+    if (perkMap.has(data)) {
+      o = perkMap.get(data);
     }
     this.perkName = o?.name;
     this.perkIcon = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/styles/${getRunesUrl(
@@ -115,14 +124,11 @@ class perk {
     )}.png`;
   }
 }
-class item {
+class Item {
   constructor(data, itemMap) {
     let o = null;
-    for (let map of itemMap) {
-      if (map.has(data)) {
-        o = map.get(data);
-        break;
-      }
+    if (itemMap.has(data)) {
+      o = itemMap.get(data);
     }
     this.itemName = o?.name;
     this.itemIcon = getItemUrl(data, itemMap);
@@ -161,11 +167,8 @@ export const timeStamp = (gameCreation) => {
 function getSpellName(spellId, spellMap) {
   const regex = new RegExp("Icons2D/(.*).png", "gm");
   let o = null;
-  for (let map of spellMap) {
-    if (map.has(spellId)) {
-      o = map.get(spellId);
-      break;
-    }
+  if (spellMap.has(spellId)) {
+    o = spellMap.get(spellId);
   }
 
   let url = "";
@@ -179,14 +182,11 @@ function getSpellName(spellId, spellMap) {
   }
   return m[1].toLocaleLowerCase();
 }
-function getRunesUrl(id, runesMap) {
+function getRunesUrl(id, perkMap) {
   const regex = new RegExp("Styles/(.*).png", "gm");
   let o = null;
-  for (let map of runesMap) {
-    if (map.has(id)) {
-      o = map.get(id);
-      break;
-    }
+  if (perkMap.has(id)) {
+    o = perkMap.get(id);
   }
   if (!o) {
     return "runesicon";
@@ -205,11 +205,8 @@ function getItemUrl(id, itemMap) {
   }
   const regex = new RegExp("Icons2D/(.*).png", "gm");
   let o = null;
-  for (let map of itemMap) {
-    if (map.has(id)) {
-      o = map.get(id);
-      break;
-    }
+  if (itemMap.has(id)) {
+    o = itemMap.get(id);
   }
   if (!o) {
     return str;

@@ -16,12 +16,11 @@ export const getSpellUrl = () => {
       if (!res.ok) {
         reject(`GET: ${spellUrl}, status: ${res.status}`);
       }
-      let spellMap = res.data.map((item) => {
-        const map = new Map();
+      const map = new Map();
+      res.data.forEach((item) => {
         map.set(item.id, new SpellData(item));
-        return map;
       });
-      resolve(spellMap);
+      resolve(map);
     } catch (error) {
       reject("spellUrlError:", error);
     }
@@ -39,12 +38,11 @@ export const getPerkUrl = () => {
       if (!res.ok) {
         reject(`GET: ${perkUrl}, status: ${res.status}`);
       }
-      let perkMap = res.data.map((item) => {
-        const map = new Map();
+      const map = new Map();
+      res.data.forEach((item) => {
         map.set(item.id, new PerkData(item));
-        return map;
       });
-      resolve(perkMap);
+      resolve(map);
     } catch (error) {
       reject("perkUrlError:", error);
     }
@@ -62,12 +60,11 @@ export const getItemUrl = () => {
       if (!res.ok) {
         reject(`GET: ${itemUrl}, status: ${res.status}`);
       }
-      let itemMap = res.data.map((item) => {
-        const map = new Map();
+      const map = new Map();
+      res.data.forEach((item) => {
         map.set(item.id, new ItemData(item));
-        return map;
       });
-      resolve(itemMap);
+      resolve(map);
     } catch (error) {
       reject("itemUrlError:", error);
     }

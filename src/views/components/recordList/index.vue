@@ -13,31 +13,22 @@ const props = defineProps({
   },
 });
 let ready = ref(false);
-let spellMap = ref({});
-let perkMap = ref({});
-let itemMap = ref({});
 let games = ref([]);
 let gameCount = ref(0);
 let begIndex = ref(0);
 let endIndex = ref(10);
+let loading = ref(false);
 const init = async () => {
   // getItemUrl().then((res) => {
   //   console.log(res);
   // });
-  Promise.all([getSpellUrl(), getPerkUrl(), getItemUrl()])
-    .then((res) => {
-      spellMap.value = res[0];
-      perkMap.value = res[1];
-      itemMap.value = res[2];
-      ready.value = true;
-    })
-    .catch((e) => {
-      $Message("静态资源加载错误！", e, "warning");
-    });
+  loading.value = true;
+
   getHistory(begIndex.value, endIndex.value);
 };
 
 const getHistory = (beg, end) => {
+  loading.value = true;
   let index = {
     begIndex: String(beg),
     endIndex: String(end),
@@ -46,9 +37,10 @@ const getHistory = (beg, end) => {
     .then((data) => {
       console.log("战绩列表加载成功");
       gameCount.value = data.games.gameCount;
-      games.value = data.games.games.reverse();
+      games.value = data.games.games.reverse().slice(0, 10);
       begIndex.value = 0;
       endIndex.value = 10;
+      loading.value = false;
     })
     .catch((e) => {
       console.log(e);
@@ -62,7 +54,10 @@ const getHistory = (beg, end) => {
       }
     });
 };
-
+let gameIndex = ref(-1);
+const select = (index) => {
+  gameIndex.value = index;
+};
 let currentIndex = ref(1);
 watch(currentIndex, (value) => {
   console.log(`第${currentIndex.value}次请求战绩列表`);
@@ -75,16 +70,15 @@ init();
 
 <template>
   <div class="game-con">
-    <el-row justify="space-evenly" style="height: 100%">
-      <el-col :span="10" class="game-record">
-        <el-scrollbar height="800px">
+    <el-row style="height: 100%">
+      <div class="game-record">
+        <el-scrollbar height="800px" v-loading="loading">
           <template v-for="(item, index) in games" :key="index">
             <game-item
-              :spellMap="spellMap"
-              :perkMap="perkMap"
-              :itemMap="itemMap"
               :game="item"
-              v-if="ready"
+              v-if="!loading"
+              @click="select(index)"
+              :class="gameIndex === index ? '' : 'gameItem'"
             ></game-item>
           </template>
         </el-scrollbar>
@@ -96,24 +90,30 @@ init();
           v-model:current-page="currentIndex"
           :total="gameCount"
         />
-      </el-col>
-      <el-col :span="12">
+      </div>
+      <div>
         <game-detail />
-      </el-col>
+      </div>
     </el-row>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .game-con {
-  width: 100%;
-  height: 100%;
+  //width: 100%;
+  //height: calc(100% - 40px);
+  display: flex;
+  padding: 0 10px;
   .game-record {
+    width: 486px;
     height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
   }
+}
+.gameItem {
+  box-shadow: -10px 0px 20px -10px rgba(0, 0, 0, 0.75) inset;
 }
 </style>
