@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 export const useSpellStore = defineStore("spell", {
   state: () => ({
-    spell: "",
+    spell: new Map(),
   }),
   getters: {
     getSpell: (state) => {
@@ -17,7 +17,7 @@ export const useSpellStore = defineStore("spell", {
 });
 export const usePerkStore = defineStore("perk", {
   state: () => ({
-    Perk: "",
+    Perk: new Map(),
   }),
   getters: {
     getPerk: (state) => {
@@ -32,7 +32,7 @@ export const usePerkStore = defineStore("perk", {
 });
 export const useItemStore = defineStore("item", {
   state: () => ({
-    Item: "",
+    Item: new Map(),
   }),
   getters: {
     getItem: (state) => {

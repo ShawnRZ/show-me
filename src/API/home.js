@@ -37,3 +37,9 @@ export const getSummonerMatchHistory = (puuid, query) => {
     query,
   });
 };
+export const getMatchDetail = (gameId) => {
+  return request({
+    url: `/lol-match-history/v1/games/${gameId}`,
+    method: "get",
+  });
+};

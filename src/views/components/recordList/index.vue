@@ -2,10 +2,9 @@
 import gameDetail from "@/views/components/recordList/gameDetail/index.vue";
 import gameItem from "@/views/components/recordList/gameList/gmailItem.vue";
 
-import { getItemUrl, getPerkUrl, getSpellUrl } from "@/API/assets.js";
 import { ref, watch } from "vue";
 import { $Message } from "@/utils/base.js";
-import { getSummonerMatchHistory } from "@/API/home.js";
+import { getMatchDetail, getSummonerMatchHistory } from "@/API/home.js";
 const props = defineProps({
   puuid: {
     type: String,
@@ -55,8 +54,18 @@ const getHistory = (beg, end) => {
     });
 };
 let gameIndex = ref(-1);
-const select = (index) => {
+let match = ref(null);
+const select = (index, game) => {
   gameIndex.value = index;
+  getMatchDetail(game.gameId)
+    .then((data) => {
+      console.log(data);
+      match.value = data;
+    })
+    .catch((e) => {
+      match.value = null;
+    })
+    .finally(() => {});
 };
 let currentIndex = ref(1);
 watch(currentIndex, (value) => {
@@ -77,7 +86,7 @@ init();
             <game-item
               :game="item"
               v-if="!loading"
-              @click="select(index)"
+              @click="select(index, item)"
               :class="gameIndex === index ? '' : 'gameItem'"
             ></game-item>
           </template>
@@ -91,8 +100,8 @@ init();
           :total="gameCount"
         />
       </div>
-      <div>
-        <game-detail />
+      <div class="game-detail" v-if="match">
+        <game-detail :match="match" />
       </div>
     </el-row>
   </div>

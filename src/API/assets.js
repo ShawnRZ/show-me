@@ -4,7 +4,7 @@ import { SpellData } from "@/modules/SpellData.js";
 import { PerkData } from "@/modules/PerkData.js";
 import { ItemData } from "@/modules/ItemData.js";
 
-export const getSpellUrl = () => {
+export const _getSpellUrl = () => {
   return new Promise(async (resolve, reject) => {
     const spellUrl =
       "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/zh_cn/v1/summoner-spells.json";
@@ -26,7 +26,7 @@ export const getSpellUrl = () => {
     }
   });
 };
-export const getPerkUrl = () => {
+export const _getPerkUrl = () => {
   return new Promise(async (resolve, reject) => {
     const perkUrl =
       "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/zh_cn/v1/perks.json";
@@ -48,7 +48,7 @@ export const getPerkUrl = () => {
     }
   });
 };
-export const getItemUrl = () => {
+export const _getItemUrl = () => {
   return new Promise(async (resolve, reject) => {
     const itemUrl =
       "https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/zh_cn/v1/items.json";

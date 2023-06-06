@@ -3,7 +3,7 @@ import headerCard from "@/layout/headerCard/index.vue";
 import asideCard from "@/layout/asideCard/index.vue";
 import { nextTick, provide, ref } from "vue";
 import { useRouter } from "vue-router";
-import { getItemUrl, getPerkUrl, getSpellUrl } from "@/API/assets.js";
+import { _getItemUrl, _getPerkUrl, _getSpellUrl } from "@/API/assets.js";
 import { $Message } from "@/utils/base.js";
 import {
   useItemStore,
@@ -24,7 +24,7 @@ const reLoad = () => {
 provide("reLoad", reLoad);
 const init = () => {
   isRouterLive.value = false;
-  Promise.all([getSpellUrl(), getPerkUrl(), getItemUrl()])
+  Promise.all([_getSpellUrl(), _getPerkUrl(), _getItemUrl()])
     .then((res) => {
       spell.setSpell(res[0]);
       pert.setPerk(res[1]);

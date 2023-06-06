@@ -32,16 +32,40 @@ import {
   usePerkStore,
   useSpellStore,
 } from "@/stors/store/static.js";
+import {
+  $Message,
+  getItemUrl,
+  getRunesUrl,
+  getSpellName,
+} from "@/utils/base.js";
+import { _getItemUrl, _getPerkUrl, _getSpellUrl } from "@/API/assets.js";
 
 const spell = useSpellStore();
 const perk = usePerkStore();
 const item = useItemStore();
 
 export class Game {
+  await;
   constructor(data) {
     let spellMap = spell.getSpell;
     let perkMap = perk.getPerk;
     let itemMap = item.getItem;
+    if (spellMap === "") {
+      Promise.all([_getSpellUrl(), _getPerkUrl(), _getItemUrl()])
+        .then((res) => {
+          spell.setSpell(res[0]);
+          perk.setPerk(res[1]);
+          item.setItem(res[2]);
+          console.log("静态资源加载成功");
+        })
+        .catch((e) => {
+          $Message("静态资源加载错误！", e, "warning");
+        });
+    }
+    spellMap = spell.getSpell;
+    perkMap = perk.getPerk;
+    itemMap = item.getItem;
+    console.log(spellMap);
     this.gameId = data.gameId;
     // 是否胜利
     this.win = data.participants[0].stats.win;
@@ -111,7 +135,7 @@ export class Game {
     this.totalDamageDealtToChampions = stats.totalDamageDealtToChampions;
   }
 }
-class Perk {
+export class Perk {
   constructor(data, perkMap) {
     let o = null;
     if (perkMap.has(data)) {
@@ -124,7 +148,7 @@ class Perk {
     )}.png`;
   }
 }
-class Item {
+export class Item {
   constructor(data, itemMap) {
     let o = null;
     if (itemMap.has(data)) {
@@ -164,57 +188,3 @@ export const timeStamp = (gameCreation) => {
   }
   return "";
 };
-function getSpellName(spellId, spellMap) {
-  const regex = new RegExp("Icons2D/(.*).png", "gm");
-  let o = null;
-  if (spellMap.has(spellId)) {
-    o = spellMap.get(spellId);
-  }
-
-  let url = "";
-  if (!o) {
-    return "summoner_empty";
-  }
-  url = o.iconPath;
-  let m = regex.exec(url);
-  if (!m) {
-    return "summoner_empty";
-  }
-  return m[1].toLocaleLowerCase();
-}
-function getRunesUrl(id, perkMap) {
-  const regex = new RegExp("Styles/(.*).png", "gm");
-  let o = null;
-  if (perkMap.has(id)) {
-    o = perkMap.get(id);
-  }
-  if (!o) {
-    return "runesicon";
-  }
-  let url = o.iconPath;
-  let m = regex.exec(url);
-  if (!m) {
-    return "runesicon";
-  }
-  return m[1].toLocaleLowerCase();
-}
-function getItemUrl(id, itemMap) {
-  let str = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/gp_ui_placeholder.png`;
-  if (id === 0) {
-    return str;
-  }
-  const regex = new RegExp("Icons2D/(.*).png", "gm");
-  let o = null;
-  if (itemMap.has(id)) {
-    o = itemMap.get(id);
-  }
-  if (!o) {
-    return str;
-  }
-  let url = o.iconPath;
-  let m = regex.exec(url);
-  if (!m) {
-    return str;
-  }
-  return `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/${m[1].toLocaleLowerCase()}.png`;
-}

@@ -205,7 +205,7 @@ const game = computed(() => {
   //border-radius: 5px;
   border-left: 6px solid #5282e6;
   border-top: 2px solid #5282e6;
-  /* border-right: 2px solid #5282e6; */
+  border-right: 2px solid #5282e6;
   border-bottom: 2px solid #5282e6;
   border-image: linear-gradient(-90deg, #1e1e1eff 0%, #5282e6 100%) 2 2 2 2;
 }
@@ -213,7 +213,7 @@ const game = computed(() => {
   //border-radius: 5px;
   border-left: 6px solid #e63f56;
   border-top: 2px solid #e63f56;
-  /* border-right: 2px solid #5282e6; */
+  border-right: 2px solid #5282e6;
   border-bottom: 2px solid #e63f56;
   border-image: linear-gradient(-90deg, #1e1e1eff 0%, #e63f56 100%) 2 2 2 2;
   //background-origin: border-box;

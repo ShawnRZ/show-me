@@ -46,3 +46,57 @@ export function updateCommandLine() {
     resolve();
   });
 }
+export function getSpellName(spellId, spellMap) {
+  const regex = new RegExp("Icons2D/(.*).png", "gm");
+  let o = null;
+  // if (spellMap.has(spellId)) {
+  o = spellMap.get(spellId);
+  // }
+
+  let url = "";
+  if (!o) {
+    return "summoner_empty";
+  }
+  url = o.iconPath;
+  let m = regex.exec(url);
+  if (!m) {
+    return "summoner_empty";
+  }
+  return m[1].toLocaleLowerCase();
+}
+export function getRunesUrl(id, perkMap) {
+  const regex = new RegExp("Styles/(.*).png", "gm");
+  let o = null;
+  if (perkMap.has(id)) {
+    o = perkMap.get(id);
+  }
+  if (!o) {
+    return "runesicon";
+  }
+  let url = o.iconPath;
+  let m = regex.exec(url);
+  if (!m) {
+    return "runesicon";
+  }
+  return m[1].toLocaleLowerCase();
+}
+export function getItemUrl(id, itemMap) {
+  let str = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/gp_ui_placeholder.png`;
+  if (id === 0) {
+    return str;
+  }
+  const regex = new RegExp("Icons2D/(.*).png", "gm");
+  let o = null;
+  if (itemMap.has(id)) {
+    o = itemMap.get(id);
+  }
+  if (!o) {
+    return str;
+  }
+  let url = o.iconPath;
+  let m = regex.exec(url);
+  if (!m) {
+    return str;
+  }
+  return `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/assets/items/icons2d/${m[1].toLocaleLowerCase()}.png`;
+}
