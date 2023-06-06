@@ -64,6 +64,8 @@ const select = (index, game) => {
     })
     .catch((e) => {
       match.value = null;
+      console.log("再次请求战绩详情");
+      select(index, game);
     })
     .finally(() => {});
 };
@@ -120,6 +122,10 @@ init();
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+  }
+  .game-detail {
+    width: 500px;
+    height: 100%;
   }
 }
 .gameItem {

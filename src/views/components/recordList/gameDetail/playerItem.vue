@@ -14,16 +14,88 @@ const player = computed(() => {
 </script>
 
 <template>
-  {{ player }}
-  <!--  <div class="player">-->
-  <!--    <div class="champion"></div>-->
-  <!--    <div class="spells"></div>-->
-  <!--    <div class="summoner-name"></div>-->
-  <!--    <div class="perks-items">-->
-  <!--      <div class="perks"></div>-->
-  <!--      <div class="items"></div>-->
-  <!--    </div>-->
-  <!--  </div>-->
+  <div class="player">
+    <div class="champion">
+      <img class="icon" :src="player.champIcon" alt="" />
+      <div class="level">{{ player.champLevel }}</div>
+    </div>
+    <div class="spells">
+      <img :src="player.spell1" alt="" />
+      <img :src="player.spell2" alt="" />
+    </div>
+    <div class="summoner-name">
+      {{ player.summonerName }}
+    </div>
+    <div class="perks-items">
+      <div class="perks">
+        <div v-for="perk in player.perks">
+          <img :src="perk.perkIcon" alt="" />
+        </div>
+      </div>
+      <div class="items">
+        <div v-for="perk in player.items">
+          <img :src="perk.itemIcon" alt="" />
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.player {
+  height: 70px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  img {
+    width: 25px;
+    height: 25px;
+  }
+  .champion {
+    width: 70px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    .icon {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+    }
+    .level {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background-color: #202d37;
+      font-size: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+  }
+  .spells {
+    width: 30px;
+    height: 50px;
+  }
+  .summoner-name {
+    height: 55px;
+    width: 140px;
+  }
+  .perks-items {
+    width: 175px;
+    .perks {
+      width: 175px;
+      display: flex;
+    }
+    .items {
+      width: 175px;
+      display: flex;
+    }
+  }
+}
+</style>

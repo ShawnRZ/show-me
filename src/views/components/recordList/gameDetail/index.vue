@@ -19,9 +19,7 @@ const detail = computed(() => {
 <template>
   <div class="game-detail">
     战绩详情
-    <!--    {{ spellMap }}-->
     <div class="detail-con">
-      <!--			{{ detail }}-->
       <template v-for="(item, index) in detail.player" :key="index">
         <player-item v-if="detail" :player="item"></player-item>
       </template>
@@ -29,4 +27,8 @@ const detail = computed(() => {
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.game-detail {
+  padding: 0 20px;
+}
+</style>

@@ -95,6 +95,10 @@ export class Player {
       participants.spell1Id,
       spellMap
     )}.png`;
+    this.spell2 = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/${getSpellName(
+      participants.spell2Id,
+      spellMap
+    )}.png`;
     //召唤师名称
     this.summonerName = participantIdentities.player.summonerName;
     //   符文

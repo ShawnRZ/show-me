@@ -49,9 +49,9 @@ export function updateCommandLine() {
 export function getSpellName(spellId, spellMap) {
   const regex = new RegExp("Icons2D/(.*).png", "gm");
   let o = null;
-  // if (spellMap.has(spellId)) {
-  o = spellMap.get(spellId);
-  // }
+  if (spellMap.has(spellId)) {
+    o = spellMap.get(spellId);
+  }
 
   let url = "";
   if (!o) {
