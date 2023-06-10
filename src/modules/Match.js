@@ -1,49 +1,7 @@
-// export interface Match {
-//   // 对局开始的时间戳
-//   gameCreation: number;
-//   // 对局开始的时间
-//   gameCreationDate: string;
-//   // 对局持续的时间，单位秒
-//   gameDuration: number;
-//   // 对局ID
-//   gameId: number;
-//   // 游戏模式（用不到）
-//   gameMode: string;
-//   // 游戏类型（用不到）
-//   gameType: string;
-//   // 游戏版本
-//   gameVersion: string;
-//   // 地图ID（用不到）
-//   mapId: number;
-//   // 玩家的身份信息列表
-//   participantIdentities: Identities[];
-//   // 玩家列表
-//   participants: Participant[];
-//   platformId: string;
-//   // 队列ID（通过这个值来获取游戏模式：匹配，排位，大乱斗之类的）
-//   queueId: number;
-//   seasonId: number;
-//   // 队伍列表，只有红蓝两个队伍
-//   teams: Team[];
-// }
-
-import { getSpellName } from "@/utils/base.js";
 import { Item, Perk } from "@/modules/Game.js";
-import {
-  useItemStore,
-  usePerkStore,
-  useSpellStore,
-} from "@/stors/store/static.js";
-const spell = useSpellStore();
-const perk = usePerkStore();
-const item = useItemStore();
-
+import { getSpellName } from "@/utils/getImgUrl.js";
 export class Match {
   constructor(data) {
-    let spellMap = spell.getSpell;
-    let perkMap = perk.getPerk;
-    let itemMap = item.getItem;
-    console.log(spellMap);
     // 对局开始的时间戳
     this.gameCreation = data.gameCreation;
     // 对局开始的时间
@@ -72,18 +30,12 @@ export class Match {
     // 队伍列表，只有红蓝两个队伍
     this.teams = data.teams;
     this.player = data.participants.map((participants, index) => {
-      return new Player(
-        participants,
-        data.participantIdentities[index],
-        spellMap,
-        perkMap,
-        itemMap
-      );
+      return new Player(participants, data.participantIdentities[index]);
     });
   }
 }
 export class Player {
-  constructor(participants, participantIdentities, spellMap, perkMap, itemMap) {
+  constructor(participants, participantIdentities) {
     // participants=data.participants[i]
     // participantIdentities=data.participantIdentities[i]
     // 英雄图片
@@ -92,12 +44,10 @@ export class Player {
     this.champLevel = participants.stats.champLevel;
     //召唤师技能
     this.spell1 = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/${getSpellName(
-      participants.spell1Id,
-      spellMap
+      participants.spell1Id
     )}.png`;
     this.spell2 = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/${getSpellName(
-      participants.spell2Id,
-      spellMap
+      participants.spell2Id
     )}.png`;
     //召唤师名称
     this.summonerName = participantIdentities.player.summonerName;
@@ -111,14 +61,14 @@ export class Player {
         stats["perk" + i + "Var2"],
         stats["perk" + i + "Var3"],
       ];
-      this["perk" + i] = new Perk(stats["perk" + i], perkMap, Vars);
+      this["perk" + i] = new Perk(stats["perk" + i], Vars);
       this.perks.push(this["perk" + i]);
     }
     //   装备1-7name和图片
     this.items = [];
     for (let i = 0; i < 7; i++) {
       // this.item0 = new Item(stats.item0, itemMap);
-      this["item" + i] = new Item(stats["item" + i], itemMap);
+      this["item" + i] = new Item(stats["item" + i]);
       this.items.push(this["item" + i]);
     }
   }

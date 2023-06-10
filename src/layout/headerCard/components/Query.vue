@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { $Message } from "@/utils/base.js";
-import { useConfigStore } from "@/stors/store/config.js";
+import { useConfigStore } from "@/store/config.js";
 import { useRouter } from "vue-router";
 
 const configStore = useConfigStore();

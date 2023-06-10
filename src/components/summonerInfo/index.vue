@@ -14,7 +14,7 @@ let loading = ref(false);
 let soloCard = ref({});
 let flexCard = ref({});
 const init = () => {
-  loading.value = false;
+  loading.value = true;
   // 根据puuid获取召唤师详情
   getSummoner(props.puuid).then((data) => {
     summoner.value = data;
@@ -24,7 +24,7 @@ const init = () => {
     const { RANKED_SOLO_5x5, RANKED_FLEX_SR } = data.queueMap;
     soloCard.value = new RankStatus(RANKED_SOLO_5x5);
     flexCard.value = new RankStatus(RANKED_FLEX_SR);
-    loading.value = true;
+    loading.value = false;
   });
 };
 init();
@@ -33,7 +33,7 @@ init();
 <template>
   <div class="user-card">
     <div class="profile">
-      <el-skeleton :loading="!loading" :animated="true">
+      <el-skeleton :loading="loading" :animated="true">
         <template #template>
           <div style="display: flex">
             <el-skeleton-item variant="image" class="te-img" />
@@ -66,7 +66,7 @@ init();
         <span>{{ ["单双排", "灵活排位"][index] }}</span>
       </template>
 
-      <el-skeleton :loading="!loading" :animated="true">
+      <el-skeleton :loading="loading" :animated="true">
         <template #template>
           <div style="display: flex">
             <el-skeleton-item variant="image" class="te-img" />

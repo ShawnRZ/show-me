@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import "./styles.css";
-import App from "./App2.vue";
+import App from "./App.vue";
 import { createPinia } from "pinia";
 import "element-plus/theme-chalk/dark/css-vars.css";
 import * as ElementPlusIconsVue from "@element-plus/icons-vue";

@@ -3,13 +3,10 @@ import headerCard from "@/layout/headerCard/index.vue";
 import asideCard from "@/layout/asideCard/index.vue";
 import { nextTick, provide, ref } from "vue";
 import { useRouter } from "vue-router";
-import { _getItemUrl, _getPerkUrl, _getSpellUrl } from "@/API/assets.js";
-import { $Message } from "@/utils/base.js";
-import {
-  useItemStore,
-  usePerkStore,
-  useSpellStore,
-} from "@/stors/store/static.js";
+import { useItemStore, usePerkStore, useSpellStore } from "@/store/static.js";
+import { useConfigStore } from "@/store/config.js";
+
+const configStore = useConfigStore();
 let isRouterLive = ref(true);
 const router = useRouter();
 const spell = useSpellStore();
@@ -24,17 +21,6 @@ const reLoad = () => {
 provide("reLoad", reLoad);
 const init = () => {
   isRouterLive.value = false;
-  Promise.all([_getSpellUrl(), _getPerkUrl(), _getItemUrl()])
-    .then((res) => {
-      spell.setSpell(res[0]);
-      pert.setPerk(res[1]);
-      item.setItem(res[2]);
-      isRouterLive.value = true;
-    })
-    .catch((e) => {
-      $Message("静态资源加载错误！", e, "warning");
-      init();
-    });
 };
 init();
 </script>
@@ -50,7 +36,7 @@ init();
           <asideCard></asideCard>
         </el-aside>
         <el-main>
-          <template v-if="isRouterLive">
+          <template v-if="isRouterLive && configStore.getIsReady">
             <router-view v-slot="{ Component }">
               <keep-alive>
                 <component :is="Component" />

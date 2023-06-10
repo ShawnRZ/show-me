@@ -1,6 +1,6 @@
 <script setup>
-import SummonerInfo from "@/views/components/summonerInfo/index.vue";
-import recordList from "@/views/components/recordList/index.vue";
+import SummonerInfo from "@/components/summonerInfo/index.vue";
+import recordList from "@/components/recordList/index.vue";
 import { computed, nextTick, provide, ref, watch } from "vue";
 
 const props = defineProps({

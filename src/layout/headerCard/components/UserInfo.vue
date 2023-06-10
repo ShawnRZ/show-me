@@ -2,7 +2,7 @@
 import { inject, onMounted, ref } from "vue";
 import { getCurrentSummoner } from "@/API/layout.js";
 import { $Message, updateCommandLine } from "@/utils/base";
-import { useConfigStore } from "@/stors/store/config.js";
+import { useConfigStore } from "@/store/config.js";
 import { ElNotification } from "element-plus";
 import { useRouter } from "vue-router";
 const router = useRouter();

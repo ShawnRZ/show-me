@@ -6,7 +6,7 @@ import { deepCopy } from "@/utils/base.js";
 //   useItemStore,
 //   usePerkStore,
 //   useSpellStore,
-// } from "@/stors/store/static.js";
+// } from "@/store/store/static.js";
 // const spellStore = useSpellStore();
 // const perkStore = usePerkStore();
 // const itemStore = useItemStore();

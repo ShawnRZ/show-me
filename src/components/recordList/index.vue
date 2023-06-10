@@ -1,6 +1,6 @@
 <script setup>
-import gameDetail from "@/views/components/recordList/gameDetail/index.vue";
-import gameItem from "@/views/components/recordList/gameList/gmailItem.vue";
+import gameDetail from "@/components/recordList/gameDetail/index.vue";
+import gameItem from "@/components/recordList/gameList/gmailItem.vue";
 
 import { ref, watch } from "vue";
 import { $Message } from "@/utils/base.js";
@@ -17,6 +17,7 @@ let gameCount = ref(0);
 let begIndex = ref(0);
 let endIndex = ref(10);
 let loading = ref(false);
+let detailLoading = ref(false);
 const init = async () => {
   // getItemUrl().then((res) => {
   //   console.log(res);
@@ -57,10 +58,11 @@ let gameIndex = ref(-1);
 let match = ref(null);
 const select = (index, game) => {
   gameIndex.value = index;
+  detailLoading.value = true;
   getMatchDetail(game.gameId)
     .then((data) => {
-      console.log(data);
       match.value = data;
+      detailLoading.value = false;
     })
     .catch((e) => {
       match.value = null;
@@ -71,6 +73,7 @@ const select = (index, game) => {
 };
 let currentIndex = ref(1);
 watch(currentIndex, (value) => {
+  match.value = null;
   console.log(`第${currentIndex.value}次请求战绩列表`);
   begIndex.value = (value - 1) * 10;
   endIndex.value = value * 10;
@@ -82,8 +85,8 @@ init();
 <template>
   <div class="game-con">
     <el-row style="height: 100%">
-      <div class="game-record">
-        <el-scrollbar height="800px" v-loading="loading">
+      <div class="game-record" v-loading="loading">
+        <el-scrollbar height="800px">
           <template v-for="(item, index) in games" :key="index">
             <game-item
               :game="item"
@@ -102,8 +105,8 @@ init();
           :total="gameCount"
         />
       </div>
-      <div class="game-detail" v-if="match">
-        <game-detail :match="match" />
+      <div class="game-detail" v-loading="detailLoading">
+        <game-detail :match="match" v-if="match" />
       </div>
     </el-row>
   </div>
@@ -125,7 +128,7 @@ init();
   }
   .game-detail {
     width: 500px;
-    height: 100%;
+    height: 800px;
   }
 }
 .gameItem {

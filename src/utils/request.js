@@ -1,7 +1,7 @@
 // 请求拦截器
-import { useConfigStore } from "@/stors/store/config.js";
+import { useConfigStore } from "@/store/config.js";
 
-import pinia from "@/stors/pinia.js";
+import pinia from "@/store/pinia.js";
 import { deepCopy, getNowDate } from "@/utils/base.js";
 import { fetch } from "@tauri-apps/api/http";
 

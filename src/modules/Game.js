@@ -1,71 +1,17 @@
-// export class Game {
-//   constructor(data) {
-//     this.gameCreation = data.gameCreation;
-//     // 对局开始的时间
-//     this.gameCreationDate = data.gameCreationDate;
-//     // 对局持续的时间，单位秒
-//     this.gameDuration = data.gameDuration;
-//     // 对局ID
-//     this.gameId = data.gameId;
-//     // 游戏模式（用不到）
-//     this.gameMode = data.gameMode;
-//     // 游戏类型（用不到）
-//     this.gameType = data.gameType;
-//     // 游戏版本
-//     this.gameVersion = data.gameVersion;
-//     // 地图ID（用不到）
-//     this.mapId = data.mapId;
-//     // 玩家的身份信息列表
-//     this.participantIdentities = data.participantIdentities;
-//     // 玩家列表
-//     this.participants = data.participants;
-//     this.platformId = data.platformId;
-//     // 队列ID（通过这个值来获取游戏模式：匹配，排位，大乱斗之类的）
-//     this.queueId = data.queueId;
-//     this.seasonId = data.seasonId;
-//     // 队伍列表，只有红蓝两个队伍
-//     // this.teams=Team[];
-//   }
-// }
+import { useItemStore, usePerkStore, useSpellStore } from "@/store/static.js";
 import {
-  useItemStore,
-  usePerkStore,
-  useSpellStore,
-} from "@/stors/store/static.js";
-import {
-  $Message,
   getItemUrl,
   getRuneDetail,
   getRunesUrl,
   getSpellName,
-} from "@/utils/base.js";
-import { _getItemUrl, _getPerkUrl, _getSpellUrl } from "@/API/assets.js";
-
-const spell = useSpellStore();
+} from "@/utils/getImgUrl.js";
 const perk = usePerkStore();
 const item = useItemStore();
+let perkMap = await perk.getPerk();
+let itemMap = await item.getItem();
 
 export class Game {
-  await;
   constructor(data) {
-    let spellMap = spell.getSpell;
-    let perkMap = perk.getPerk;
-    let itemMap = item.getItem;
-    if (spellMap === "") {
-      Promise.all([_getSpellUrl(), _getPerkUrl(), _getItemUrl()])
-        .then((res) => {
-          spell.setSpell(res[0]);
-          perk.setPerk(res[1]);
-          item.setItem(res[2]);
-          console.log("静态资源加载成功");
-        })
-        .catch((e) => {
-          $Message("静态资源加载错误！", e, "warning");
-        });
-    }
-    spellMap = spell.getSpell;
-    perkMap = perk.getPerk;
-    itemMap = item.getItem;
     this.gameId = data.gameId;
     // 是否胜利
     this.win = data.participants[0].stats.win;
@@ -83,22 +29,20 @@ export class Game {
     this.champLevel = data.participants[0].stats.champLevel;
     //   召唤师技能图片1
     this.spell1 = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/${getSpellName(
-      data.participants[0].spell1Id,
-      spellMap
+      data.participants[0].spell1Id
     )}.png`;
     //   召唤师技能图片2
     this.spell2 = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/data/spells/icons2d/${getSpellName(
-      data.participants[0].spell2Id,
-      spellMap
+      data.participants[0].spell2Id
     )}.png`;
     // 符文0-5name和图片
     let stats = data.participants[0].stats;
-    this.perk0 = new Perk(stats.perk0, perkMap);
-    this.perk1 = new Perk(stats.perk1, perkMap);
-    this.perk2 = new Perk(stats.perk2, perkMap);
-    this.perk3 = new Perk(stats.perk3, perkMap);
-    this.perk4 = new Perk(stats.perk4, perkMap);
-    this.perk5 = new Perk(stats.perk5, perkMap);
+    this.perk0 = new Perk(stats.perk0);
+    this.perk1 = new Perk(stats.perk1);
+    this.perk2 = new Perk(stats.perk2);
+    this.perk3 = new Perk(stats.perk3);
+    this.perk4 = new Perk(stats.perk4);
+    this.perk5 = new Perk(stats.perk5);
     this.perks = [
       this.perk0,
       this.perk1,
@@ -108,13 +52,13 @@ export class Game {
       this.perk5,
     ];
     //   装备1-7name和图片
-    this.item0 = new Item(stats.item0, itemMap);
-    this.item1 = new Item(stats.item1, itemMap);
-    this.item2 = new Item(stats.item2, itemMap);
-    this.item3 = new Item(stats.item3, itemMap);
-    this.item4 = new Item(stats.item4, itemMap);
-    this.item5 = new Item(stats.item5, itemMap);
-    this.item6 = new Item(stats.item6, itemMap);
+    this.item0 = new Item(stats.item0);
+    this.item1 = new Item(stats.item1);
+    this.item2 = new Item(stats.item2);
+    this.item3 = new Item(stats.item3);
+    this.item4 = new Item(stats.item4);
+    this.item5 = new Item(stats.item5);
+    this.item6 = new Item(stats.item6);
     this.items = [
       this.item0,
       this.item1,
@@ -136,29 +80,28 @@ export class Game {
   }
 }
 export class Perk {
-  constructor(data, perkMap, Vars = []) {
+  constructor(data, Vars = []) {
     let o = null;
     if (perkMap.has(data)) {
       o = perkMap.get(data);
     }
     this.perkName = o?.name;
     this.perkIcon = `https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/perk-images/styles/${getRunesUrl(
-      data,
-      perkMap
+      data
     )}.png`;
     if (Vars) {
-      this.perkDetail = getRuneDetail(data, Vars, perkMap);
+      this.perkDetail = getRuneDetail(data, Vars);
     }
   }
 }
 export class Item {
-  constructor(data, itemMap) {
+  constructor(data) {
     let o = null;
     if (itemMap.has(data)) {
       o = itemMap.get(data);
     }
     this.itemName = o?.name;
-    this.itemIcon = getItemUrl(data, itemMap);
+    this.itemIcon = getItemUrl(data);
   }
 }
 const switchGameType = {

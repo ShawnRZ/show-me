@@ -1,7 +1,7 @@
 export class RankStatus {
   constructor(data) {
     let tier = data.tier.toLowerCase();
-    this.rankIcon = tier === "none" ? "unranked" : tier;
+    this.rankIcon = tier === "" ? "unranked" : tier;
     this.rankTier = switchTier[data.tier];
     this.rankDivision = data.division === "NA" ? "" : data.division;
     this.Lp = data.leaguePoints;
