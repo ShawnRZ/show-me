@@ -1,5 +1,5 @@
 <script setup>
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { Match, Player } from "@/modules/Match.js";
 
 const props = defineProps({
@@ -29,7 +29,16 @@ const player = computed(() => {
     <div class="perks-items">
       <div class="perks">
         <div v-for="perk in player.perks">
-          <img :src="perk.perkIcon" alt="" />
+          <el-tooltip placement="top">
+            <template #content>
+              <span>
+                {{ perk.perkName }}
+              </span>
+              <br />
+              <span v-html="perk.perkDetail"></span>
+            </template>
+            <img :src="perk.perkIcon" alt="" />
+          </el-tooltip>
         </div>
       </div>
       <div class="items">

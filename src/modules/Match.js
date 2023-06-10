@@ -103,38 +103,23 @@ export class Player {
     this.summonerName = participantIdentities.player.summonerName;
     //   符文
     let stats = participants.stats;
-    this.perk0 = new Perk(stats.perk0, perkMap);
-    this.perk1 = new Perk(stats.perk1, perkMap);
-    this.perk2 = new Perk(stats.perk2, perkMap);
-    this.perk3 = new Perk(stats.perk3, perkMap);
-    this.perk4 = new Perk(stats.perk4, perkMap);
-    this.perk5 = new Perk(stats.perk5, perkMap);
-    this.perks = [
-      this.perk0,
-      this.perk1,
-      this.perk2,
-      this.perk3,
-      this.perk4,
-      this.perk5,
-    ];
-    //   符文简介
-    // this.perkDetail
+    this.perks = [];
+    for (let i = 0; i < 6; i++) {
+      // this.perk0 = new Perk(stats.perk0, perkMap);
+      let Vars = [
+        stats["perk" + i + "Var1"],
+        stats["perk" + i + "Var2"],
+        stats["perk" + i + "Var3"],
+      ];
+      this["perk" + i] = new Perk(stats["perk" + i], perkMap, Vars);
+      this.perks.push(this["perk" + i]);
+    }
     //   装备1-7name和图片
-    this.item0 = new Item(stats.item0, itemMap);
-    this.item1 = new Item(stats.item1, itemMap);
-    this.item2 = new Item(stats.item2, itemMap);
-    this.item3 = new Item(stats.item3, itemMap);
-    this.item4 = new Item(stats.item4, itemMap);
-    this.item5 = new Item(stats.item5, itemMap);
-    this.item6 = new Item(stats.item6, itemMap);
-    this.items = [
-      this.item0,
-      this.item1,
-      this.item2,
-      this.item3,
-      this.item4,
-      this.item5,
-      this.item6,
-    ];
+    this.items = [];
+    for (let i = 0; i < 7; i++) {
+      // this.item0 = new Item(stats.item0, itemMap);
+      this["item" + i] = new Item(stats["item" + i], itemMap);
+      this.items.push(this["item" + i]);
+    }
   }
 }

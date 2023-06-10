@@ -35,6 +35,7 @@ import {
 import {
   $Message,
   getItemUrl,
+  getRuneDetail,
   getRunesUrl,
   getSpellName,
 } from "@/utils/base.js";
@@ -65,7 +66,6 @@ export class Game {
     spellMap = spell.getSpell;
     perkMap = perk.getPerk;
     itemMap = item.getItem;
-    console.log(spellMap);
     this.gameId = data.gameId;
     // 是否胜利
     this.win = data.participants[0].stats.win;
@@ -136,7 +136,7 @@ export class Game {
   }
 }
 export class Perk {
-  constructor(data, perkMap) {
+  constructor(data, perkMap, Vars = []) {
     let o = null;
     if (perkMap.has(data)) {
       o = perkMap.get(data);
@@ -146,6 +146,9 @@ export class Perk {
       data,
       perkMap
     )}.png`;
+    if (Vars) {
+      this.perkDetail = getRuneDetail(data, Vars, perkMap);
+    }
   }
 }
 export class Item {
