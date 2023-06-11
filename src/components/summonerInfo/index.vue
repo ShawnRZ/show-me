@@ -83,7 +83,7 @@ init();
           <div class="card-body">
             <div class="rank-icon">
               <img
-                :src="`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${soloCard.rankIcon}.png`"
+                :src="`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${item.rankIcon}.png`"
                 alt=""
               />
             </div>
