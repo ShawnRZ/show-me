@@ -1,15 +1,6 @@
 <script setup>
 import { computed, ref } from "vue";
 import { Game } from "@/modules/Game.js";
-import { deepCopy } from "@/utils/base.js";
-// import {
-//   useItemStore,
-//   usePerkStore,
-//   useSpellStore,
-// } from "@/store/store/static.js";
-// const spellStore = useSpellStore();
-// const perkStore = usePerkStore();
-// const itemStore = useItemStore();
 const props = defineProps({
   game: {
     type: Object,
@@ -17,9 +8,6 @@ const props = defineProps({
   },
 });
 const game = computed(() => {
-  // let spell = spellStore.getSpell;
-  // let perk = perkStore.getPerk;
-  // let item = itemStore.getItem;
   return new Game(props.game);
 });
 
@@ -79,9 +67,9 @@ const game = computed(() => {
       <p style="font-weight: 700; font-size: 14px">
         <span>&nbsp;{{ game.kills }}&nbsp;</span>
         /
-        <span style="color: red">&nbsp;{{ game.assists }}&nbsp;</span>
+        <span style="color: red">&nbsp;{{ game.deaths }}&nbsp;</span>
         /
-        <span>&nbsp;{{ game.deaths }}&nbsp;</span>
+        <span>&nbsp;{{ game.assists }}&nbsp;</span>
       </p>
       <div class="total">
         <div class="gold">
