@@ -1,24 +1,14 @@
 <script setup>
 import { ref } from "vue";
 import { getRankStatus, getSummoner } from "@/API/home.js";
-import { RankStatus } from "@/modules/RankStatus.js";
+import { Summoner } from "@/modules/Summoner.js";
 
-let summoner = ref({});
-let loading = ref(false);
-let soloCard = ref({});
-let flexCard = ref({});
+let summoner = ref(new Summoner());
+let loading = ref(true);
 const init = (puuid) => {
-  console.log(puuid);
   loading.value = true;
-  // 根据puuid获取召唤师详情
-  getSummoner(puuid).then((data) => {
-    summoner.value = data;
-  });
-  // 获取rank详情
-  getRankStatus(puuid).then((data) => {
-    const { RANKED_SOLO_5x5, RANKED_FLEX_SR } = data.queueMap;
-    soloCard.value = new RankStatus(RANKED_SOLO_5x5);
-    flexCard.value = new RankStatus(RANKED_FLEX_SR);
+  Promise.all([getSummoner(puuid), getRankStatus(puuid)]).then((res) => {
+    summoner.value = new Summoner(res[0], res[1].queueMap);
     loading.value = false;
   });
 };
@@ -40,10 +30,7 @@ defineExpose({
         </template>
         <template #default>
           <div class="icon">
-            <img
-              :src="`https://raw.communitydragon.org/latest/plugins/rcp-be-lol-game-data/global/default/v1/profile-icons/${summoner.profileIconId}.jpg`"
-              alt=""
-            />
+            <img :src="summoner.profileIcon" alt="" />
             <span class="level">
               {{ summoner.summonerLevel }}
             </span>
@@ -59,7 +46,10 @@ defineExpose({
       </el-skeleton>
     </div>
 
-    <el-card class="solo-rank" v-for="(item, index) in [soloCard, flexCard]">
+    <el-card
+      class="solo-rank"
+      v-for="(item, index) in [summoner.soloCard, summoner.flexCard]"
+    >
       <template #header>
         <span>{{ ["单双排", "灵活排位"][index] }}</span>
       </template>
@@ -80,10 +70,7 @@ defineExpose({
         <template #default>
           <div class="card-body">
             <div class="rank-icon">
-              <img
-                :src="`https://raw.communitydragon.org/latest/plugins/rcp-fe-lol-shared-components/global/default/${item.rankIcon}.png`"
-                alt=""
-              />
+              <img :src="item.rankIcon" alt="" />
             </div>
             <div class="rank-level">
               <div class="level">
