@@ -1,6 +1,8 @@
 <script setup>
 import { computed, ref } from "vue";
 import { Match, Player } from "@/modules/Match.js";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const props = defineProps({
   player: {
@@ -11,6 +13,12 @@ const props = defineProps({
 const player = computed(() => {
   return props.player;
 });
+const serchName = (serchName) => {
+  router.push({
+    name: "queryByName",
+    params: { queryName: serchName },
+  });
+};
 </script>
 
 <template>
@@ -23,7 +31,7 @@ const player = computed(() => {
       <img :src="player.spell1" alt="" />
       <img :src="player.spell2" alt="" />
     </div>
-    <div class="summoner-name">
+    <div class="summoner-name" @click="serchName(player.summonerName)">
       {{ player.summonerName }}
     </div>
     <div class="perks-items">
@@ -94,6 +102,7 @@ const player = computed(() => {
   .summoner-name {
     height: 55px;
     width: 140px;
+    cursor: pointer;
   }
   .perks-items {
     width: 175px;
