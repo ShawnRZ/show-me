@@ -3,31 +3,29 @@ import { ref } from "vue";
 import { getRankStatus, getSummoner } from "@/API/home.js";
 import { RankStatus } from "@/modules/RankStatus.js";
 
-const props = defineProps({
-  puuid: {
-    type: String,
-    default: "",
-  },
-});
 let summoner = ref({});
 let loading = ref(false);
 let soloCard = ref({});
 let flexCard = ref({});
-const init = () => {
+const init = (puuid) => {
+  console.log(puuid);
   loading.value = true;
   // 根据puuid获取召唤师详情
-  getSummoner(props.puuid).then((data) => {
+  getSummoner(puuid).then((data) => {
     summoner.value = data;
   });
   // 获取rank详情
-  getRankStatus(props.puuid).then((data) => {
+  getRankStatus(puuid).then((data) => {
     const { RANKED_SOLO_5x5, RANKED_FLEX_SR } = data.queueMap;
     soloCard.value = new RankStatus(RANKED_SOLO_5x5);
     flexCard.value = new RankStatus(RANKED_FLEX_SR);
     loading.value = false;
   });
 };
-init();
+// init();
+defineExpose({
+  init,
+});
 </script>
 
 <template>

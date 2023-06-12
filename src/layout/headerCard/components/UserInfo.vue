@@ -37,10 +37,7 @@ const update = async () => {
       profileIconId.value = data.profileIconId || 29;
       summonerName.value = data.displayName || "点击连接客户端";
       setPercentage(data);
-      router.push({
-        name: "currentPuuid",
-        params: { puuid: data.puuid },
-      });
+
       configStore.setIsReady(true);
       $Message("更新当前召唤师", data.displayName, "success");
     })

@@ -5,25 +5,18 @@ import gameItem from "@/components/recordList/gameList/gmailItem.vue";
 import { ref, watch } from "vue";
 import { $Message } from "@/utils/base.js";
 import { getMatchDetail, getSummonerMatchHistory } from "@/API/home.js";
-const props = defineProps({
-  puuid: {
-    type: String,
-    default: "",
-  },
-});
-let ready = ref(false);
+const props = defineProps({});
 let games = ref([]);
 let gameCount = ref(0);
 let begIndex = ref(0);
 let endIndex = ref(10);
 let loading = ref(false);
 let detailLoading = ref(false);
-const init = async () => {
-  // getItemUrl().then((res) => {
-  //   console.log(res);
-  // });
-  loading.value = true;
-
+let puuid = ref("");
+const init = async (Puuid) => {
+  console.log(Puuid);
+  // loading.value = true;
+  puuid.value = Puuid;
   getHistory(begIndex.value, endIndex.value);
 };
 
@@ -33,7 +26,7 @@ const getHistory = (beg, end) => {
     begIndex: String(beg),
     endIndex: String(end),
   };
-  getSummonerMatchHistory(props.puuid, index)
+  getSummonerMatchHistory(puuid.value, index)
     .then((data) => {
       console.log("战绩列表加载成功");
       gameCount.value = data.games.gameCount;
@@ -74,12 +67,15 @@ const select = (index, game) => {
 let currentIndex = ref(1);
 watch(currentIndex, (value) => {
   match.value = null;
+  gameIndex.value = -1;
   console.log(`第${currentIndex.value}次请求战绩列表`);
   begIndex.value = (value - 1) * 10;
   endIndex.value = value * 10;
   getHistory(begIndex.value, endIndex.value);
 });
-init();
+defineExpose({
+  init,
+});
 </script>
 
 <template>

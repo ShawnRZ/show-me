@@ -15,14 +15,6 @@ const routes: Array<RouteRecordRaw> = [
       title: "首页",
       icon: "home",
     },
-    children: [
-      {
-        path: "/home?/:puuid",
-        name: "currentPuuid",
-        component: () =>
-          import(/* webpackChunkName: "about" */ "@/views/home/home/index.vue"),
-      },
-    ],
   },
   {
     path: "/search",
