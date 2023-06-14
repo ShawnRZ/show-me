@@ -1,10 +1,14 @@
 use super::parameter::LcuParameter;
 use base64::prelude::*;
+use log::debug;
 use serde_json::Value;
-use std::thread::{spawn, JoinHandle};
-use tauri::{utils::debug_eprintln, Runtime};
+use std::{
+    error::Error as StdError,
+    thread::{spawn, JoinHandle},
+};
+use tauri::Runtime;
 
-pub type Error = Box<dyn std::error::Error>;
+type Error = Box<dyn StdError + Send + Sync>;
 
 static mut RUNNING: Option<JoinHandle<Result<(), String>>> = None;
 
@@ -20,10 +24,10 @@ fn message_handler<R: Runtime>(msg: String, window: &tauri::Window<R>) {
         .strip_suffix(r#"""#)
         .unwrap();
 
-    debug_eprintln!("uri: {:#?}", uri);
+    debug!("uri: {:#?}", uri);
 
     if uri == "/lol-gameflow/v1/gameflow-phase" {
-        debug_eprintln!("{}", v[2]["data"]);
+        debug!("{}", v[2]["data"]);
         match v[2]["data"].to_string().as_str() {
             "\"None\"" => {
                 window.emit("Gameflow", "None").unwrap();
@@ -68,32 +72,32 @@ fn message_handler<R: Runtime>(msg: String, window: &tauri::Window<R>) {
                 window.emit("Gameflow", "TerminatedInError").unwrap();
             }
             _ => {
-                debug_eprintln!("遇到未知事件");
+                debug!("遇到未知事件");
             }
         }
     } else if uri.starts_with("/lol-champ-select/v1/grid-champions/") {
-        debug_eprintln!("选择英雄: ");
-        debug_eprintln!("{}:{}", v[2]["data"]["id"], v[2]["data"]["name"]);
+        debug!("选择英雄: ");
+        debug!("{}:{}", v[2]["data"]["id"], v[2]["data"]["name"]);
         window
             .emit("ChampSelect", v[2]["data"]["id"].to_string())
             .unwrap();
     }
 }
 
-pub fn connect<R: Runtime>(window: tauri::Window<R>) -> Result<(), Error> {
+pub async fn connect<R: Runtime>(window: tauri::Window<R>) -> Result<(), Error> {
     // 检查 websocket 连接是否存在
     unsafe {
         if let Some(r) = &RUNNING {
             if !r.is_finished() {
-                debug_eprintln!("websocket 连接已存在");
+                debug!("websocket 连接已存在");
                 return Ok(());
             }
         }
     }
 
     // 创建一个 websocket 连接
-    debug_eprintln!("新建 websocket 连接");
-    let lp = LcuParameter::get()?;
+    debug!("新建 websocket 连接");
+    let lp = LcuParameter::get().await?;
 
     let u = tungstenite::handshake::client::Request::builder()
         .uri(std::format!("wss://127.0.0.1:{}", lp.port))
@@ -127,6 +131,7 @@ pub fn connect<R: Runtime>(window: tauri::Window<R>) -> Result<(), Error> {
                 let msg = ws.read_message().map_or_else(
                     |e| {
                         window.emit_and_trigger("ConnectionClosed", "").unwrap();
+                        tauri::async_runtime::block_on(LcuParameter::abandon());
                         Err(e).unwrap()
                     },
                     |v| v,

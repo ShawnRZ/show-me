@@ -1,8 +1,8 @@
-use serde::{Deserialize, Serialize};
-
 pub mod http;
 pub mod parameter;
 pub mod websocket;
+
+use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Summoner {
@@ -22,6 +22,8 @@ pub struct Summoner {
     xp_since_last_level: i64,
     #[serde(rename = "xpUntilNextLevel")]
     xp_until_next_level: i64,
+    #[serde(rename = "region", default)]
+    pub region: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

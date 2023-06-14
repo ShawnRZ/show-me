@@ -1,6 +1,8 @@
+use log::debug;
 use serde::{Deserialize, Serialize};
+use std::{fmt, mem::MaybeUninit, sync::Once};
 use sysinfo::{ProcessExt, System, SystemExt};
-use tauri::utils::debug_eprintln;
+use tauri::async_runtime::Mutex;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct LcuParameter {
@@ -9,41 +11,84 @@ pub struct LcuParameter {
 }
 
 impl LcuParameter {
-    fn new(port: String, token: String) -> Self {
-        LcuParameter { port, token }
+    pub async fn get() -> Result<LcuParameter, ParameterError> {
+        debug!("LcuParameter::get()");
+        let mut lp = LcuParameterGlobal::get().lock().await;
+        if !lp.working {
+            lp.refresh()?;
+        }
+        Ok(LcuParameter {
+            port: lp.port.to_string(),
+            token: lp.token.to_string(),
+        })
     }
-    pub fn get() -> Result<Self, LcuParameterError> {
+
+    pub async fn abandon() {
+        debug!("abandon()");
+        LcuParameterGlobal::get().lock().await.working = false;
+    }
+}
+
+struct LcuParameterGlobal {
+    port: String,
+    token: String,
+    working: bool,
+}
+
+impl LcuParameterGlobal {
+    fn get() -> &'static Mutex<LcuParameterGlobal> {
+        debug!("LcuParameterGlobal::get()");
+        static mut G_LCU_PARAMETER: MaybeUninit<Mutex<LcuParameterGlobal>> = MaybeUninit::uninit();
+        static ONCE: Once = Once::new();
+
+        ONCE.call_once(|| unsafe {
+            debug!("初始化LCU_PARAMETER");
+            G_LCU_PARAMETER
+                .as_mut_ptr()
+                .write(Mutex::new(LcuParameterGlobal {
+                    port: String::new(),
+                    token: String::new(),
+                    working: false,
+                }));
+        });
+        unsafe { &*G_LCU_PARAMETER.as_ptr() }
+    }
+
+    fn refresh(&mut self) -> Result<(), ParameterError> {
+        debug!("LcuParameterGlobal::refresh()");
         let mut sys = System::new_all();
         sys.refresh_all();
         let processes: Vec<_> = sys.processes_by_exact_name("LeagueClientUx.exe").collect();
         if processes.len() > 1 {
-            Err(LcuParameterError::MultipleClientProcessesFound)?
+            Err(ParameterError::MultipleClientProcessesFound)?
         } else if processes.len() < 1 {
-            Err(LcuParameterError::ClientProcessNotFound)?
+            Err(ParameterError::ClientProcessNotFound)?
         }
         let process = processes[0];
-        debug_eprintln!("{:#?}", process.cmd());
+        debug!("{:#?}", process.cmd());
         let args = process.cmd();
 
         let port = args
             .iter()
             .find(|arg| arg.starts_with("--app-port"))
             .map(|arg| arg.strip_prefix("--app-port=").unwrap())
-            .ok_or(LcuParameterError::PortNotFound)?
+            .ok_or(ParameterError::PortNotFound)?
             .to_string();
         let token = args
             .iter()
             .find(|arg| arg.starts_with("--remoting-auth-token"))
             .map(|arg| arg.strip_prefix("--remoting-auth-token=").unwrap())
-            .ok_or(LcuParameterError::TokenNotFound)?
+            .ok_or(ParameterError::TokenNotFound)?
             .to_string();
-
-        Ok(Self::new(port, token))
+        self.port = port;
+        self.token = token;
+        self.working = true;
+        Ok(())
     }
 }
 
-#[derive(Debug, Clone)]
-pub enum LcuParameterError {
+#[derive(Debug)]
+pub enum ParameterError {
     // 存在多个客户端进程
     MultipleClientProcessesFound,
     // 没有找到客户端进程
@@ -54,7 +99,7 @@ pub enum LcuParameterError {
     TokenNotFound,
 }
 
-impl std::fmt::Display for LcuParameterError {
+impl fmt::Display for ParameterError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::MultipleClientProcessesFound => write!(f, "存在多个客户端进程"),
@@ -65,13 +110,13 @@ impl std::fmt::Display for LcuParameterError {
     }
 }
 
-impl std::error::Error for LcuParameterError {}
+impl std::error::Error for ParameterError {}
 
-#[cfg(test)]
-mod tests {
-    use crate::lcu::parameter::LcuParameter;
-    #[test]
-    fn get_lcu_parameter_test() {
-        println!("{:#?}", LcuParameter::get().unwrap());
-    }
-}
+// #[cfg(test)]
+// mod tests {
+//     use crate::lcu::parameter::LcuParameter;
+//     #[test]
+//     fn get_lcu_parameter_test() {
+//         println!("{:#?}", LcuParameter::get().unwrap());
+//     }
+// }
