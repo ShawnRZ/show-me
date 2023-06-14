@@ -144,6 +144,32 @@ pub async fn get_summoners_by_name(name: &str) -> Result<Vec<Summoner>, Error> {
     Ok(summoners)
 }
 
+pub async fn get_summoner_by_name(name: &str, region: &str) -> Result<String, Error> {
+    debug!("sgp::get_summoner_by_name({}, {})", name, region);
+    let token = get_sgp_token().await?;
+    let region_path = get_region_paths().await?.read().await;
+    for (i, v) in SERVER_INFO.iter().enumerate() {
+        if region != v.0 {
+            continue;
+        }
+        let path = std::format!(
+            "/summoner-ledge/v1/regions/{}/summoners/name/{}",
+            region_path[i],
+            name
+        );
+        let url = std::format!("{}{}", v.1, path);
+        let res = Client::new()
+            .get(url)
+            .bearer_auth(&token)
+            .send()
+            .await?
+            .error_for_status()?;
+
+        return Ok(res.text().await?);
+    }
+    Err(std::format!("没有此服务器: {}", region))?
+}
+
 async fn get_region_paths() -> Result<&'static RwLock<Vec<String>>, Error> {
     debug!("sgp::get_regions()");
     static mut G_REGIONS: MaybeUninit<RwLock<Vec<String>>> = MaybeUninit::uninit();
@@ -193,6 +219,12 @@ mod tests {
             1,
         ))
         .unwrap();
+        println!("{:#?}", s);
+    }
+
+    #[test]
+    fn get_summoner_by_name() {
+        let s = tokio_test::block_on(super::get_summoner_by_name("fyyyyk", "hn1")).unwrap();
         println!("{:#?}", s);
     }
 }

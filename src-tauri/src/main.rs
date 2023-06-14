@@ -49,12 +49,12 @@ async fn get_current_summoner() -> Result<Summoner, String> {
 }
 
 #[tauri::command]
-async fn get_summoners_by_name(name: String) -> Result<(), String> {
+async fn get_summoner_by_name(name: String, region: String) -> Result<String, String> {
     debug!("get_summoners_by_name()");
-    sgp::get_summoners_by_name(&name)
+    let res = sgp::get_summoner_by_name(&name, &region)
         .await
         .map_err(|e| e.to_string())?;
-    Ok(())
+    Ok(res)
 }
 
 #[tauri::command]
@@ -92,7 +92,7 @@ fn main() {
             connect,
             get_current_summoner,
             get_command_line,
-            get_summoners_by_name,
+            get_summoner_by_name,
             get_match_history_by_puuid,
         ])
         .run(tauri::generate_context!())
