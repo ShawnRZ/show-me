@@ -19,6 +19,7 @@ fn test_and_set_cer() -> Result<(), String> {
 #[tauri::command]
 async fn get_command_line() -> Result<(String, String), String> {
     debug!("get_command_line()");
+    LcuParameter::abandon().await;
     let lp = LcuParameter::get().await.map_err(|e| e.to_string())?;
     Ok((lp.token.clone(), lp.port.clone()))
 }
