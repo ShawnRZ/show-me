@@ -1,0 +1,98 @@
+{
+    "earnedRegaliaRewardIds": [],
+    "highestPreviousSeasonAchievedRank": "IV",
+    "highestPreviousSeasonAchievedTier": "GOLD",
+    "highestPreviousSeasonEndRank": "IV",
+    "highestPreviousSeasonEndTier": "GOLD",
+    "queues": [
+        {
+            "highestRank": "IV",
+            "highestTier": "PLATINUM",
+            "leaguePoints": 1,
+            "losses": 0,
+            "premadeMmrRestricted": false,
+            "provisionalGameThreshold": 10,
+            "provisionalGamesRemaining": 0,
+            "queueType": "RANKED_FLEX_SR",
+            "rank": "IV",
+            "ratedRating": 0,
+            "tier": "PLATINUM",
+            "wins": 116
+        },
+        {
+            "highestRank": "I",
+            "highestTier": "GOLD",
+            "leaguePoints": 7,
+            "losses": 0,
+            "premadeMmrRestricted": false,
+            "previousSeasonAchievedRank": "IV",
+            "previousSeasonAchievedTier": "GOLD",
+            "previousSeasonEndRank": "IV",
+            "previousSeasonEndTier": "GOLD",
+            "provisionalGameThreshold": 10,
+            "provisionalGamesRemaining": 0,
+            "queueType": "RANKED_SOLO_5x5",
+            "rank": "II",
+            "ratedRating": 0,
+            "tier": "GOLD",
+            "wins": 96
+        },
+        {
+            "leaguePoints": 0,
+            "losses": 0,
+            "premadeMmrRestricted": false,
+            "provisionalGameThreshold": 5,
+            "provisionalGamesRemaining": 0,
+            "queueType": "RANKED_TFT",
+            "ratedRating": 0,
+            "wins": 0
+        },
+        {
+            "leaguePoints": 0,
+            "losses": 0,
+            "premadeMmrRestricted": false,
+            "provisionalGameThreshold": 5,
+            "provisionalGamesRemaining": 0,
+            "queueType": "RANKED_TFT_TURBO",
+            "ratedRating": 0,
+            "wins": 0
+        },
+        {
+            "leaguePoints": 0,
+            "losses": 0,
+            "premadeMmrRestricted": false,
+            "provisionalGameThreshold": 5,
+            "provisionalGamesRemaining": 0,
+            "queueType": "RANKED_TFT_DOUBLE_UP",
+            "ratedRating": 0,
+            "wins": 0
+        }
+    ],
+    "seasons": {
+        "RANKED_FLEX_SR": {
+            "currentSeasonEnd": 1701273600000,
+            "currentSeasonId": 13,
+            "nextSeasonStart": 0
+        },
+        "RANKED_SOLO_5x5": {
+            "currentSeasonEnd": 1701273600000,
+            "currentSeasonId": 13,
+            "nextSeasonStart": 0
+        },
+        "RANKED_TFT": {
+            "currentSeasonEnd": 1694620740000,
+            "currentSeasonId": 23,
+            "nextSeasonStart": 0
+        },
+        "RANKED_TFT_DOUBLE_UP": {
+            "currentSeasonEnd": 1694620740000,
+            "currentSeasonId": 23,
+            "nextSeasonStart": 0
+        },
+        "RANKED_TFT_TURBO": {
+            "currentSeasonEnd": 1694620740000,
+            "currentSeasonId": 23,
+            "nextSeasonStart": 0
+        }
+    }
+}
