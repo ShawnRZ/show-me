@@ -201,6 +201,15 @@ async fn get_region_paths() -> Result<&'static RwLock<Vec<String>>, Error> {
     unsafe { Ok(&*G_REGIONS.as_ptr()) }
 }
 
+pub async fn get_ranked_stats_by_puuid(puuid: &str, region: &str) -> Result<String, Error> {
+    let host = get_serrver_addr_by_region_name(region);
+    let url = std::format!("{host}/leagues-ledge/v2/rankedStats/puuid/{puuid}");
+    let token = get_sgp_token().await?;
+    let res = Client::new().get(url).bearer_auth(token).send().await?;
+
+    Ok(res.text().await?)
+}
+
 #[cfg(test)]
 mod tests {
 
@@ -225,6 +234,15 @@ mod tests {
     #[test]
     fn get_summoner_by_name() {
         let s = tokio_test::block_on(super::get_summoner_by_name("fyyyyk", "hn1")).unwrap();
+        println!("{:#?}", s);
+    }
+
+    #[test]
+    fn get_ranked_stats_by_puuid() {
+        let s = tokio_test::block_on(super::get_ranked_stats_by_puuid(
+            "cb7be6df-59fc-5618-b230-ad321ada241e",
+            "hn9",
+        )).unwrap();
         println!("{:#?}", s);
     }
 }

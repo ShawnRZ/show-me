@@ -2,26 +2,58 @@ pub mod cer;
 pub mod lcu;
 pub mod sgp;
 
+use std::collections::HashMap;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Summoner {
-    #[serde(rename = "name")]
+    #[serde(rename = "name", default)]
     name: String,
-    #[serde(rename = "level")]
+    #[serde(rename = "level", default)]
     level: u64,
-    #[serde(rename = "puuid")]
+    #[serde(rename = "puuid", default)]
     puuid: String,
-    #[serde(rename = "profileIconId")]
+    #[serde(rename = "profileIconId", default)]
     avatar: u64,
     #[serde(rename = "privacy")]
     privacy: Privaacy,
-    #[serde(rename = "accountId")]
+    #[serde(rename = "accountId", default)]
     account_id: u64,
     #[serde(rename = "region", default)]
     region: String,
     #[serde(rename = "regionName", default)]
     region_name: String,
+    #[serde(rename = "rankedstats", default)]
+    rankedstats: HashMap<String, RankedStats>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+struct RankedStats {
+    #[serde(rename = "highestRank", default)]
+    highest_rank: String,
+    #[serde(rename = "highestTier", default)]
+    highest_tier: String,
+    #[serde(rename = "leaguePoints", default)]
+    league_points: i32,
+    #[serde(rename = "losses", default)]
+    losses: i32,
+    #[serde(rename = "premadeMmrRestricted", default)]
+    premade_mmr_restricted: bool,
+    #[serde(rename = "provisionalGameThreshold", default)]
+    provisional_game_threshold: i32,
+    #[serde(rename = "provisionalGamesRemaining", default)]
+    provisional_games_remaining: i32,
+    #[serde(rename = "queueType", default)]
+    queue_type: String,
+    #[serde(rename = "rank", default)]
+    rank: String,
+    #[serde(rename = "ratedRating", default)]
+    rated_rating: i32,
+    #[serde(rename = "tier", default)]
+    tier: String,
+    #[serde(rename = "wins", default)]
+    wins: i32,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
