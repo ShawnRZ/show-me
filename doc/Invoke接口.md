@@ -6,7 +6,7 @@
 
 #### 接口
 ```javascript
-invock("test_and_set_cer");
+invoke("test_and_set_cer");
 ```
 
 返回值: 无
@@ -18,7 +18,7 @@ invock("test_and_set_cer");
 import { invoke } from "@tauri-apps/api";
 
 try{
-    await invock("test_and_set_cer");
+    await invoke("test_and_set_cer");
 }catch (error){
     console.log(error);
 }
@@ -28,7 +28,7 @@ try{
 ## 召唤师信息查询（全区）
 - 接口：
 ```javascript
-invock(get_summoner_by_name, {
+invoke(get_summoner_by_name, {
   name: name
   region: region
 });
@@ -89,7 +89,7 @@ invock(get_ranked_stats_by_puuid, {
 ## 战绩查询（全区）
 - 接口
 ```javascript
-invock(get_match_history_by_puuid, {
+invoke(get_match_history_by_puuid, {
   puuid: string,
   region: string,
   start: number,
