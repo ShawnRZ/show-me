@@ -1,81 +1,60 @@
-use super::parameter;
+use super::parameter::LcuParameter;
 use super::Summoner;
-use reqwest::blocking::{Client, RequestBuilder};
-use tauri::utils::debug_eprintln;
+use log::debug;
+use reqwest::Method;
+use reqwest::{Client, RequestBuilder};
+use serde_json::Value;
+use std::error::Error as StdError;
 
-type Error = Box<dyn std::error::Error>;
-pub struct LcuClient {
-    client: Client,
-    port: String,
-    token: String,
-    abandon: bool,
+type Error = Box<dyn StdError + Send + Sync>;
+
+async fn request(path: &str, method: Method) -> Result<RequestBuilder, Error> {
+    let lp = LcuParameter::get().await?;
+    Ok(Client::new()
+        .request(
+            method,
+            std::format!("https://127.0.0.1:{}{}", &lp.port, path),
+        )
+        .basic_auth("riot", Some(lp.token)))
 }
 
-impl LcuClient {
-    // pub fn new() -> Result<LcuClient, Error> {
-    //     let lp = parameter::LcuParameter::get()?;
-    //     Ok(LcuClient {
-    //         client: Client::new(),
-    //         port: lp.port,
-    //         token: lp.token,
-    //         abandon: false,
-    //     })
-    // }
+pub async fn get_current_summoner() -> Result<Summoner, Error> {
+    debug!("lcu::http::get_current_summoner()");
+    let res = request("/lol-summoner/v1/current-summoner", Method::GET)
+        .await?
+        .send()
+        .await?;
 
-    fn get(&mut self, url: &str) -> Result<RequestBuilder, Error> {
-        self.refresh()?;
-        Ok(self.client.get(url).basic_auth("riot", Some(&self.token)))
-    }
+    let s: Summoner = serde_json::from_str(&res.text().await?)?;
 
-    pub fn refresh(&mut self) -> Result<(), Error> {
-        if self.abandon {
-            let lp = parameter::LcuParameter::get()?;
-            self.port = lp.port;
-            self.token = lp.token;
-        }
-        Ok(())
-    }
+    debug!("{:#?}", &s);
+
+    Ok(s)
 }
 
-impl LcuClient {
-    pub fn get_current_summoner(&mut self) -> Result<Summoner, Error> {
-        let res = self
-            .get(&std::format!(
-                "https://127.0.0.1:{}/lol-summoner/v1/current-summoner",
-                &self.port
-            ))?
-            .send()?;
-
-        if let Err(e) = res.error_for_status_ref() {
-            Err(e)?;
-        }
-
-        let s: Summoner = serde_json::from_str(&res.text()?)?;
-
-        debug_eprintln!("{:#?}", &s);
-
-        Ok(s)
-    }
-}
-
-impl Default for LcuClient {
-    fn default() -> Self {
-        LcuClient {
-            client: Client::new(),
-            port: "".to_string(),
-            token: "".to_string(),
-            abandon: true,
-        }
-    }
+pub async fn get_sgp_token() -> Result<String, Error> {
+    debug!("get_sgp_token()");
+    let res = request("/entitlements/v1/token", Method::GET)
+        .await?
+        // .send()?;
+        .send()
+        .await?;
+    let res: Value = serde_json::from_str(&res.text().await?)?;
+    let token = res["accessToken"].to_string();
+    let token = token
+        .strip_prefix(r#"""#)
+        .unwrap()
+        .strip_suffix(r#"""#)
+        .unwrap()
+        .to_string();
+    debug!("{token}");
+    Ok(token)
 }
 
 // #[cfg(test)]
 // mod tests {
 //     use super::LcuClient;
-
 //     #[test]
 //     fn get_current_summoner() {
-//         let c = LcuClient::new().unwrap();
-//         let _ = tokio_test::block_on(c.get_current_summoner()).unwrap();
 //     }
 // }
