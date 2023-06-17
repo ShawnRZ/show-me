@@ -7,6 +7,7 @@ import { useItemStore, usePerkStore, useSpellStore } from "@/store/static.js";
 import { useConfigStore } from "@/store/config.js";
 import { invoke } from "@tauri-apps/api";
 import { $Message } from "@/utils/base.js";
+import wrappedInvoke from "@/utils/wrappedInvoke.js";
 
 const configStore = useConfigStore();
 let isRouterLive = ref(true);

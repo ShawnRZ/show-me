@@ -35,6 +35,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SummonerInfo: typeof import('./src/components/summonerInfo/index.vue')['default']
+    SummonerItem: typeof import('./src/components/summonerItem/index.vue')['default']
     SvgIcon: typeof import('./src/components/svgIcon/index.vue')['default']
   }
   export interface ComponentCustomProperties {
