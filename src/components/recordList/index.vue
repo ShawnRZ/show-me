@@ -43,24 +43,39 @@ const getHistory = (beg, end) => {
       if (e.data.message.includes("body was empty")) {
         $Message("", "召唤师战绩为空！", "warning");
       } else {
-        getHistory(beg, end);
+        // 最多递归请求10次
+        if (end < 100) {
+          getHistory(beg, end);
+        } else {
+          loading.value = false;
+        }
       }
     });
 };
 let gameIndex = ref(-1);
 let match = ref(null);
+let flag = ref(0);
 const select = (index, game) => {
+  flag.value++;
   gameIndex.value = index;
   detailLoading.value = true;
   getMatchDetail(game.gameId)
     .then((data) => {
       match.value = data;
       detailLoading.value = false;
+      flag.value = 0;
     })
     .catch((e) => {
       match.value = null;
       console.log("再次请求战绩详情");
-      select(index, game);
+      // 递归请求最多请求10次
+      if (flag.value < 10) {
+        select(index, game);
+      } else {
+        flag.value = 0;
+        detailLoading.value = false;
+        $Message("战绩详情请求失败！");
+      }
     })
     .finally(() => {});
 };
