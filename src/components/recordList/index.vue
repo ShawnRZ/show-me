@@ -30,7 +30,11 @@ const getHistory = (beg, end) => {
     .then((data) => {
       console.log("战绩列表加载成功");
       gameCount.value = data.games.gameCount;
-      games.value = data.games.games.reverse().slice(0, 10);
+      games.value = data.games.games
+        .sort(function (a, b) {
+          return b.gameCreation - a.gameCreation;
+        })
+        .slice(0, 10);
       begIndex.value = 0;
       endIndex.value = 10;
       loading.value = false;
