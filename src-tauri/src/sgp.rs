@@ -10,7 +10,7 @@ type Error = Box<dyn std::error::Error + Send + Sync>;
 
 static SERVER_INFO: [(&str, &str, &str); 29] = [
     ("hn1", "https://hn1-cloud-sgp.lol.qq.com:21019", "艾欧尼亚"),
-    ("hn1", "https://hn2-sgp.lol.qq.com:21019", "祖安"),
+    ("hn2", "https://hn2-sgp.lol.qq.com:21019", "祖安"),
     ("hn3", "https://hn3-cloud-sgp.lol.qq.com:21019", "诺克萨斯"),
     ("hn4", "https://hn4new-sgp.lol.qq.com:21019", "班德尔城"),
     ("hn5", "https://hn5-sgp.lol.qq.com:21019", "皮尔特沃夫"),
