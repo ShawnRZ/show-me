@@ -30,13 +30,17 @@ const routes: Array<RouteRecordRaw> = [
         path: "/search?/:queryName",
         name: "queryByName",
         component: () =>
-          import(/* webpackChunkName: "about" */ "@/views/search/index.vue"),
+          import(
+            /* webpackChunkName: "about" */ "@/views/search/queryByName/index.vue"
+          ),
       },
       {
         path: "/search?/:summonerId/:platformId",
         name: "queryBySummoner",
         component: () =>
-          import(/* webpackChunkName: "about" */ "@/views/search/index.vue"),
+          import(
+            /* webpackChunkName: "about" */ "@/views/search/searchDetail/index.vue"
+          ),
       },
     ],
   },

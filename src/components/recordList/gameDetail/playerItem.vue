@@ -13,11 +13,12 @@ const props = defineProps({
 const player = computed(() => {
   return props.player;
 });
-const serchName = (summonerId, platformId) => {
+const searchName = (summonerId, platformId) => {
   router.push({
     name: "queryBySummoner",
     params: { summonerId: summonerId, platformId: platformId },
   });
+  console.log(router);
 };
 </script>
 
@@ -33,7 +34,7 @@ const serchName = (summonerId, platformId) => {
     </div>
     <div
       class="summoner-name"
-      @click="serchName(player.summonerId, player.platformId)"
+      @click="searchName(player.summonerId, player.platformId)"
     >
       {{ player.summonerName }}
     </div>
