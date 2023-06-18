@@ -13,10 +13,10 @@ const props = defineProps({
 const player = computed(() => {
   return props.player;
 });
-const serchName = (serchName) => {
+const serchName = (summonerId, platformId) => {
   router.push({
-    name: "queryByName",
-    params: { queryName: serchName },
+    name: "queryBySummoner",
+    params: { summonerId: summonerId, platformId: platformId },
   });
 };
 </script>
@@ -31,7 +31,10 @@ const serchName = (serchName) => {
       <img :src="player.spell1" alt="" />
       <img :src="player.spell2" alt="" />
     </div>
-    <div class="summoner-name" @click="serchName(player.summonerName)">
+    <div
+      class="summoner-name"
+      @click="serchName(player.summonerId, player.platformId)"
+    >
       {{ player.summonerName }}
     </div>
     <div class="perks-items">

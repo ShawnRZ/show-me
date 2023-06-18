@@ -51,6 +51,10 @@ export class Player {
     )}.png`;
     //召唤师名称
     this.summonerName = participantIdentities.player.summonerName;
+    // summonerID
+    this.summonerId = participantIdentities.player.summonerId;
+    // 服务器id
+    this.platformId = participantIdentities.player.platformId;
     //   符文
     let stats = participants.stats;
     this.perks = [];

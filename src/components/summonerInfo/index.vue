@@ -51,7 +51,7 @@ defineExpose({
       v-for="(item, index) in [summoner.soloCard, summoner.flexCard]"
     >
       <template #header>
-        <span>{{ ["单双排", "灵活排位"][index] }}</span>
+        <span>{{ ["单双排位", "灵活排位"][index] }}</span>
       </template>
 
       <el-skeleton :loading="loading" :animated="true">

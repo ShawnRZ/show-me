@@ -32,6 +32,12 @@ const routes: Array<RouteRecordRaw> = [
         component: () =>
           import(/* webpackChunkName: "about" */ "@/views/search/index.vue"),
       },
+      {
+        path: "/search?/:summonerId/:platformId",
+        name: "queryBySummoner",
+        component: () =>
+          import(/* webpackChunkName: "about" */ "@/views/search/index.vue"),
+      },
     ],
   },
 ];
