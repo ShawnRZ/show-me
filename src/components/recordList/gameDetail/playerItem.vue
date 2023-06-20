@@ -2,6 +2,8 @@
 import { computed, ref } from "vue";
 import { Match, Player } from "@/modules/Match.js";
 import { useRouter } from "vue-router";
+import { getSummonerById } from "@/API/query.js";
+import { $Message } from "@/utils/base.js";
 const router = useRouter();
 
 const props = defineProps({
@@ -14,10 +16,22 @@ const player = computed(() => {
   return props.player;
 });
 const searchName = (player) => {
-  router.push({
-    name: "queryByName",
-    params: { queryName: player.summonerName },
-  });
+  getSummonerById(player.summonerId)
+    .then((data) => {
+      console.log(data);
+      router.push({
+        name: "queryByName",
+        params: { queryName: data.displayName },
+      });
+    })
+    .catch((e) => {
+      if (e.status === 404) {
+        $Message("失败!", `召唤师不存在:${player.summonerName}！`, "warning");
+      } else {
+        $Message("失败!", `${e}！`, "warning");
+      }
+    });
+
   // 跨区查询跳转
   // router.push({
   //   name: "queryBySummoner",

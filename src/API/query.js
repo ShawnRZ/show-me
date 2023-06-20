@@ -88,3 +88,15 @@ export function getQuerySummoner(query) {
     query,
   });
 }
+
+/**
+ * 根据summonerId获取召唤师详情
+ * @param id
+ * @returns {Promise<unknown>}
+ */
+export function getSummonerById(id) {
+  return request({
+    url: `/lol-summoner/v1/summoners/${id}`,
+    method: "get",
+  });
+}
