@@ -13,12 +13,16 @@ const props = defineProps({
 const player = computed(() => {
   return props.player;
 });
-const searchName = (summonerId, platformId) => {
+const searchName = (player) => {
   router.push({
-    name: "queryBySummoner",
-    params: { summonerId: summonerId, platformId: platformId },
+    name: "queryByName",
+    params: { queryName: player.summonerName },
   });
-  console.log(router);
+  // 跨区查询跳转
+  // router.push({
+  //   name: "queryBySummoner",
+  //   params: { summonerId: player.summonerId, platformId: player.platformId },
+  // });
 };
 </script>
 
@@ -32,10 +36,7 @@ const searchName = (summonerId, platformId) => {
       <img :src="player.spell1" alt="" />
       <img :src="player.spell2" alt="" />
     </div>
-    <div
-      class="summoner-name"
-      @click="searchName(player.summonerId, player.platformId)"
-    >
+    <div class="summoner-name" @click="searchName(player)">
       {{ player.summonerName }}
     </div>
     <div class="perks-items">

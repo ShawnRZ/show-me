@@ -2,6 +2,7 @@ import { invoke } from "@tauri-apps/api";
 import { deepCopy } from "@/utils/base.js";
 import { SGP_SERVER_LIST } from "@/modules/SGP_SERVER_LIST.js";
 import { Summoner } from "@/modules/Summoner.js";
+import request from "@/utils/request.js";
 
 /**
  * 根据召唤师名称查询全区
@@ -73,5 +74,17 @@ export function get_summoner_by_name(name) {
         console.log(e);
         reject(e);
       });
+  });
+}
+/**
+ * 根据昵称获取召唤师信息
+ * @param query
+ * @returns {Promise<unknown>}
+ */
+export function getQuerySummoner(query) {
+  return request({
+    url: "/lol-summoner/v1/summoners",
+    method: "get",
+    query,
   });
 }

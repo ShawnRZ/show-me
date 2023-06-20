@@ -31,17 +31,18 @@ const routes: Array<RouteRecordRaw> = [
         name: "queryByName",
         component: () =>
           import(
-            /* webpackChunkName: "about" */ "@/views/search/queryByName/index.vue"
+            "@/views/search/searchDetail/index.vue"
+            /* "@/views/search/queryByName/index.vue",跨区查询跳转*/
           ),
       },
-      {
-        path: "/search?/:summonerId/:platformId",
-        name: "queryBySummoner",
-        component: () =>
-          import(
-            /* webpackChunkName: "about" */ "@/views/search/searchDetail/index.vue"
-          ),
-      },
+      // {
+      //   path: "/search?/:summonerId/:platformId",
+      //   name: "queryBySummoner",
+      //   component: () =>
+      //     import(
+      //       /* webpackChunkName: "about" */ "@/views/search/searchDetail/index.vue"
+      //     ),
+      // },
     ],
   },
 ];
